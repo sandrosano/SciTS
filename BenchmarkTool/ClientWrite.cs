@@ -41,10 +41,27 @@ namespace BenchmarkTool
         }
         public async Task<List<QueryStatusWrite>> RunIngestion()
         {
+<<<<<<< HEAD
                     return await RunIngestion(new EnhancedDataGenerator());
         }
 
         public async Task<List<QueryStatusWrite>> RunIngestion(EnhancedDataGenerator dataGenerator) //Reg() // instead TODO: RunINgestion(RegularDataGenerator ddd)
+=======
+
+            // return await RunIngestion(_dataGenerator);   // TODO ask warum Type Overwrite nicht geht
+            switch (Config.GetIngestionType())
+            {
+                case "regular":
+                    return await RunIngestion(new RegularDataGenerator());
+
+                default:
+                    return await RunIngestion(new DefaultDataGenerator());
+
+            }
+        }
+
+        public async Task<List<QueryStatusWrite>> RunIngestion(RegularDataGenerator dataGenerator) //Reg() // instead TODO: RunINgestion(RegularDataGenerator ddd)
+>>>>>>> 7455ced (changes in dumy db)
         {
 
             // new logic: modulo
@@ -63,7 +80,16 @@ namespace BenchmarkTool
             for (var i = 0; i < Config.GetTestRetries(); i++) // every Benchmark iteration writes to another year
             {
                 var batchStartdate = _date.AddYears(i);
+<<<<<<< HEAD
                 Batch batch = dataGenerator.GenerateBatch(_BatchSize, sensorIdsForThisClientList, batchStartdate, Config.GetDataDimensionsNr());
+=======
+                Batch batch;
+
+                if (Config.GetDataDimensionsNr() == 1)
+                    batch = dataGenerator.GenerateBatch(_BatchSize, sensorIdsForThisClientList, batchStartdate);
+                else
+                    batch = dataGenerator.GenerateBatch(_BatchSize, sensorIdsForThisClientList, batchStartdate, Config.GetDataDimensionsNr());
+>>>>>>> 7455ced (changes in dumy db)
 
                 var status = await _targetDb.WriteBatch(batch);
                 Console.WriteLine($"[{_chosenClientIndex}-{i}-{batchStartdate}] [Clients Number {_totalClientsNumber} - Batch Size {_BatchSize} - Sensors Number {_SensorsNumber} with Dimensions:{Config.GetDataDimensionsNr()}] Latency:{status.PerformanceMetric.Latency}");
@@ -78,7 +104,11 @@ namespace BenchmarkTool
             return statuses;
         }
 
+<<<<<<< HEAD
         public async Task<List<QueryStatusWrite>> RunIngestion(SimpleDataGenerator dataGenerator)
+=======
+        public async Task<List<QueryStatusWrite>> RunIngestion(DefaultDataGenerator dataGenerator)
+>>>>>>> 7455ced (changes in dumy db)
         {
             var operation = Config.GetQueryType();
             int loop = Config.GetTestRetries();

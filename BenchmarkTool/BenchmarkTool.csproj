@@ -6,12 +6,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+<<<<<<< HEAD
     <PackageReference Include="ClickHouse.Client" Version="6.5.2" />
     <PackageReference Include="DataLayerTS.Client" Version="1.4.0" />
     <PackageReference Include="ClickHouse.Ado" Version="1.5.4" />
     <PackageReference Include="InfluxDB.Client" Version="4.12.0" />
     <PackageReference Include="MySqlConnector" Version="2.2.5" />
     <PackageReference Include="Npgsql" Version="7.0.2" />
+=======
+    <PackageReference Include="ClickHouse.Client" Version="6.6.0" />
+    <PackageReference Include="DataLayerTS.Client" Version="1.4.0" />
+    <PackageReference Include="ClickHouse.Ado" Version="1.5.4" />
+    <PackageReference Include="InfluxDB.Client" Version="4.12.0" />
+    <PackageReference Include="MySqlConnector" Version="2.2.6" />
+    <PackageReference Include="Npgsql" Version="7.0.4" />
+>>>>>>> 7455ced (changes in dumy db)
     <PackageReference Include="PostgreSQLCopyHelper" Version="2.8.0" />
     <PackageReference Include="RestSharp" Version="110.2.0" />
     <PackageReference Include="RestSharp.Serializers.NewtonsoftJson" Version="110.2.0" />
@@ -19,8 +28,11 @@
     <PackageReference Include="Serilog.Sinks.Console" Version="4.1.0" />
     <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
+<<<<<<< HEAD
     <PackageReference Include="dotnet-xunit" Version="2.3.1" />
     <PackageReference Include="xunit" Version="2.4.2" />
+=======
+>>>>>>> 7455ced (changes in dumy db)
   </ItemGroup>
 
 </Project>

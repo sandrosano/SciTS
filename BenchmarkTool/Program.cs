@@ -60,9 +60,15 @@ namespace BenchmarkTool
             }
         }
 
+<<<<<<< HEAD
         private async static Task<List<QueryStatusWrite>> RunIngestionTask(ClientWrite client)
         {
             return await client.RunIngestion();
+=======
+        private static Task<List<QueryStatusWrite>> RunIngestionTask(ClientWrite client)
+        {
+            return client.RunIngestion();
+>>>>>>> 7455ced (changes in dumy db)
         }
 
         

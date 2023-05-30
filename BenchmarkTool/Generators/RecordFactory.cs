@@ -35,7 +35,10 @@ namespace BenchmarkTool.Generators
                 Constants.InfluxDBClass => new RecordInflux(sensorId, timestamp, values),
                 Constants.ClickhouseClass => new RecordClickhouse(sensorId, timestamp, values),
                 Constants.MySQLClass => new RecordMySQLDB(sensorId, timestamp, values),
+<<<<<<< HEAD
                 Constants.DummyClass => new RecordMySQLDB(sensorId, timestamp, values),
+=======
+>>>>>>> 7455ced (changes in dumy db)
                 Constants.PostgresClass => new RecordTimescaleDB(sensorId, timestamp, values),
                 Constants.VictoriametricsDBClass => new RecordVictoriametrics(sensorId, timestamp, values),
 

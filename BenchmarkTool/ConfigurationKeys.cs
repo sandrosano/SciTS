@@ -39,7 +39,11 @@ namespace BenchmarkTool
         public const string VictoriametricsDBOrganization = "VictoriametricsDBOrganization";
 
         public const string IngestionType = "IngestionType";
+<<<<<<< HEAD
 
+=======
+        public const string MultiDimensionStorageType = "MultiDimensionStorageType";
+>>>>>>> 7455ced (changes in dumy db)
         public const string QueryType = "QueryType";
         public const string TimescaleDBRangeQuery = "TimescaleDBRangeQuery";
         public const string AggregationFunction = "AggregationFunction";

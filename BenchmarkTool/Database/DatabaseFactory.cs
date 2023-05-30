@@ -30,7 +30,11 @@ namespace BenchmarkTool.Database
                     return new DummyDB();
                 case Constants.MySQLClass:
                     return new MySQLDB();
+<<<<<<< HEAD
                 case Constants.VictoriametricsDBClass:
+=======
+                    case Constants.VictoriametricsDBClass:
+>>>>>>> 7455ced (changes in dumy db)
                     return new VictoriametricsDB();
                 default:
                     throw new NotImplementedException();

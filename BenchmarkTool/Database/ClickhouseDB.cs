@@ -1,8 +1,13 @@
 ﻿// using ClickHouse.Ado; deprecated, doesnt support Async
+<<<<<<< HEAD
 using ClickHouse.Client.ADO;  
+=======
+using ClickHouse.Client.ADO;
+>>>>>>> 7455ced (changes in dumy db)
 using ClickHouse.Client.Utility;
 using Serilog;
 using System;
+using System.Text;
 using System.Threading.Tasks;
 using BenchmarkTool.Queries;
 using BenchmarkTool.Generators;
@@ -42,12 +47,21 @@ namespace BenchmarkTool.Database
         {
             try
             {
+<<<<<<< HEAD
                 
                 _connection = new ClickHouse.Client.ADO.ClickHouseConnection("Host="+Config.GetClickhouseHost()+";Protocol=https;Port="+Config.GetClickhousePort()+";Username="+Config.GetClickhouseUser()); // new ClickHouseConnection(settings);
                 _connection.ChangeDatabase(Config.GetClickhouseDatabase());
                 _connection.OpenAsync();
 
                   var settings = new ClickHouse.Ado.ClickHouseConnectionSettings()
+=======
+
+                _connection = new ClickHouse.Client.ADO.ClickHouseConnection("Host=" + Config.GetClickhouseHost() + ";Protocol=https;Port=" + Config.GetClickhousePort() + ";Username=" + Config.GetClickhouseUser()); // new ClickHouseConnection(settings);
+                _connection.ChangeDatabase(Config.GetClickhouseDatabase());
+                _connection.OpenAsync();
+
+                var settings = new ClickHouse.Ado.ClickHouseConnectionSettings()
+>>>>>>> 7455ced (changes in dumy db)
                 {
                     Host = Config.GetClickhouseHost(),
                     Port = Config.GetClickhousePort(),
@@ -65,7 +79,11 @@ namespace BenchmarkTool.Database
             }
         }
 
+<<<<<<< HEAD
         public  async Task<QueryStatusRead>  OutOfRangeQuery(OORangeQuery query)
+=======
+        public async Task<QueryStatusRead> OutOfRangeQuery(OORangeQuery query)
+>>>>>>> 7455ced (changes in dumy db)
         {
             int points = 0;
             try
@@ -83,7 +101,11 @@ namespace BenchmarkTool.Database
 
                 Stopwatch sw = Stopwatch.StartNew();
                 var reader = await cmd.ExecuteReaderAsync();
+<<<<<<< HEAD
                  while (reader.Read())
+=======
+                while (reader.Read())
+>>>>>>> 7455ced (changes in dumy db)
                 {
                     points++;
                 }
@@ -98,7 +120,11 @@ namespace BenchmarkTool.Database
             }
         }
 
+<<<<<<< HEAD
         public  async Task<QueryStatusRead>  RangeQueryAgg(RangeQuery query)
+=======
+        public async Task<QueryStatusRead> RangeQueryAgg(RangeQuery query)
+>>>>>>> 7455ced (changes in dumy db)
         {
             int points = 0;
             try
@@ -114,7 +140,11 @@ namespace BenchmarkTool.Database
 
                 Stopwatch sw = Stopwatch.StartNew();
                 var reader = await cmd.ExecuteReaderAsync();
+<<<<<<< HEAD
                  while (reader.Read())
+=======
+                while (reader.Read())
+>>>>>>> 7455ced (changes in dumy db)
                 {
                     points++;
                 }
@@ -129,7 +159,11 @@ namespace BenchmarkTool.Database
             }
         }
 
+<<<<<<< HEAD
         public  async Task<QueryStatusRead>  RangeQueryRaw(RangeQuery query)
+=======
+        public async Task<QueryStatusRead> RangeQueryRaw(RangeQuery query)
+>>>>>>> 7455ced (changes in dumy db)
         {
             int points = 0;
             try
@@ -144,7 +178,11 @@ namespace BenchmarkTool.Database
 
                 Stopwatch sw = Stopwatch.StartNew();
                 var reader = await cmd.ExecuteReaderAsync();
+<<<<<<< HEAD
                  while (reader.Read())
+=======
+                while (reader.Read())
+>>>>>>> 7455ced (changes in dumy db)
                 {
                     points++;
                 }
@@ -159,7 +197,11 @@ namespace BenchmarkTool.Database
             }
         }
 
+<<<<<<< HEAD
         public  async Task<QueryStatusRead>  AggregatedDifferenceQuery(ComparisonQuery query)
+=======
+        public async Task<QueryStatusRead> AggregatedDifferenceQuery(ComparisonQuery query)
+>>>>>>> 7455ced (changes in dumy db)
         {
             int points = 0;
             try
@@ -176,7 +218,11 @@ namespace BenchmarkTool.Database
 
                 Stopwatch sw = Stopwatch.StartNew();
                 var reader = await cmd.ExecuteReaderAsync();
+<<<<<<< HEAD
                  while (reader.Read())
+=======
+                while (reader.Read())
+>>>>>>> 7455ced (changes in dumy db)
                 {
                     points++;
                 }
@@ -190,7 +236,11 @@ namespace BenchmarkTool.Database
             }
         }
 
+<<<<<<< HEAD
         public  async Task<QueryStatusRead>  StandardDevQuery(SpecificQuery query)
+=======
+        public async Task<QueryStatusRead> StandardDevQuery(SpecificQuery query)
+>>>>>>> 7455ced (changes in dumy db)
         {
             int points = 0;
             try
@@ -205,7 +255,11 @@ namespace BenchmarkTool.Database
 
                 Stopwatch sw = Stopwatch.StartNew();
                 var reader = await cmd.ExecuteReaderAsync();
+<<<<<<< HEAD
                  while (reader.Read())
+=======
+                while (reader.Read())
+>>>>>>> 7455ced (changes in dumy db)
                 {
                     points++;
                 }
@@ -222,10 +276,23 @@ namespace BenchmarkTool.Database
         public async Task<QueryStatusWrite> WriteBatch(Batch batch)
         {
             try
+<<<<<<< HEAD
             { 
                 var command = _connection.CreateCommand();
 
                 command.CommandText = String.Format("INSERT INTO {0} ({1}, {2}, {3}) VALUES "+batch.Records, Constants.TableName, Constants.SensorID, Constants.Value, Constants.Time);
+=======
+            {
+                var command = _connection.CreateCommand(); //TODO ask how code  + batch.Records works because in Debug it wount, showing "INSERT INTO sensor_data (sensor_id, value, time) VALUES System.Collections.Generic.List`1[BenchmarkTool.Generators.IRecord]"
+
+
+                if (Config.GetMultiDimensionStorageType() == "column"){ 
+                    int c = 1 ; StringBuilder builder = new StringBuilder("");
+                    while(c < Config.GetDataDimensionsNr()) { builder.Append(",{3}_"+c); c++; }
+                    command.CommandText = String.Format("INSERT INTO {0} ({1}, {2}, {3}" + builder +") VALUES " + batch.Records, Constants.TableName, Constants.SensorID, Constants.Time, Constants.Value );
+                }  else
+                    command.CommandText = String.Format("INSERT INTO {0} ({1}, {2}, {3}) VALUES " + batch.Records, Constants.TableName, Constants.SensorID, Constants.Value, Constants.Time);
+>>>>>>> 7455ced (changes in dumy db)
 
                 Stopwatch sw = Stopwatch.StartNew();
                 await command.ExecuteNonQueryAsync();
@@ -245,7 +312,11 @@ namespace BenchmarkTool.Database
             {
                 var command = _connection.CreateCommand();
 
+<<<<<<< HEAD
                 command.CommandText = String.Format("INSERT INTO {0} ({1}, {2}, {3}) VALUES "+record, Constants.TableName, Constants.SensorID, Constants.Value, Constants.Time);
+=======
+                command.CommandText = String.Format("INSERT INTO {0} ({1}, {2}, {3}) VALUES " + record, Constants.TableName, Constants.SensorID, Constants.Value, Constants.Time);
+>>>>>>> 7455ced (changes in dumy db)
 
                 Stopwatch sw = Stopwatch.StartNew();
                 await command.ExecuteNonQueryAsync();

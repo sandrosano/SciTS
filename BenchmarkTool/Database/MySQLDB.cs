@@ -45,27 +45,47 @@ namespace BenchmarkTool.Database
             }
         }
 
+<<<<<<< HEAD
         public  Task<QueryStatusRead> OutOfRangeQuery(OORangeQuery query)
+=======
+        public async Task<QueryStatusRead> OutOfRangeQuery(OORangeQuery query)
+>>>>>>> 7455ced (changes in dumy db)
         {
             throw new NotImplementedException();
         }
 
+<<<<<<< HEAD
         public  Task<QueryStatusRead> RangeQueryAgg(RangeQuery rangeQuery)
+=======
+        public async Task<QueryStatusRead> RangeQueryAgg(RangeQuery rangeQuery)
+>>>>>>> 7455ced (changes in dumy db)
         {
             throw new NotImplementedException();
         }
 
+<<<<<<< HEAD
         public  Task<QueryStatusRead> RangeQueryRaw(RangeQuery rangeQuery)
+=======
+        public async Task<QueryStatusRead> RangeQueryRaw(RangeQuery rangeQuery)
+>>>>>>> 7455ced (changes in dumy db)
         {
             throw new NotImplementedException();
         }
 
+<<<<<<< HEAD
         public  Task<QueryStatusRead> StandardDevQuery(SpecificQuery query)
+=======
+        public async Task<QueryStatusRead> StandardDevQuery(SpecificQuery query)
+>>>>>>> 7455ced (changes in dumy db)
         {
             throw new NotImplementedException();
         }
 
+<<<<<<< HEAD
         public  Task<QueryStatusRead> AggregatedDifferenceQuery(ComparisonQuery query)
+=======
+        public async Task<QueryStatusRead> AggregatedDifferenceQuery(ComparisonQuery query)
+>>>>>>> 7455ced (changes in dumy db)
         {
             throw new NotImplementedException();
         }

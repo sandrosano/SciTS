@@ -29,7 +29,11 @@
             "preLaunchTask": "build",
             "program": "${workspaceFolder}/BenchmarkTool/bin/Debug/net7.0/BenchmarkTool.dll",
             "args": [
+<<<<<<< HEAD
                 "consecutive" // can be read, write, concurrent, consecutive
+=======
+                "write" // can be read, write, concurrent, consecutive
+>>>>>>> 7455ced (changes in dumy db)
             ],
             "cwd": "${workspaceFolder}",
             "console": "internalConsole",

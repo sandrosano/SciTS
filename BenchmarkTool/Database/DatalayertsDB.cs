@@ -338,7 +338,11 @@ namespace BenchmarkTool.Database
             }
         }
 
+<<<<<<< HEAD
         public  Task Print(object readResult, string type, bool enabled)
+=======
+        public async Task Print(object readResult, string type, bool enabled)
+>>>>>>> 7455ced (changes in dumy db)
         {
             throw new NotImplementedException();
         }
