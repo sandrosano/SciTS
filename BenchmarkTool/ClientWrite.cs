@@ -55,7 +55,7 @@ namespace BenchmarkTool
         {
             Stopwatch swC = Stopwatch.StartNew();
             // new logic: modulo
-            if (_totalClientsNumber > _SensorsNumber) throw new ArgumentException("clientsnr  must be lower then sensornumber for reg.TS ingestion");
+            if (_totalClientsNumber > _SensorsNumber) throw new ArgumentException("clientsnr  must be lower or equal then sensornumber for reg.TS ingestion");
 
             List<int> sensorIdsForThisClientList = new List<int>();
             for (int chosenSensor = 1; chosenSensor <= _SensorsNumber; chosenSensor++)  
