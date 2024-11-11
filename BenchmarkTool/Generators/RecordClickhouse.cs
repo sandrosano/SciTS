@@ -25,7 +25,7 @@ namespace BenchmarkTool.Generators
             Time = timestamp;
             ValuesArray = values;
         }
-        double getFirstValue()
+        public double GetFirstValue()
         {
             return ValuesArray[0];
         }

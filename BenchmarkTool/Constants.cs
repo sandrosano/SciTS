@@ -11,11 +11,16 @@
         public const string VictoriametricsDBClass = "VictoriametricsDB";
 
         public const string DatalayertsDBClass = "DatalayertsDB";
+
+        public const string DatalayertsDBasVectClass ="DatalayertsDBasVect";
         public const string TimescaleDBClass = "TimescaleDB";
         public const string InfluxDBClass = "InfluxDB";
         public const string ClickhouseClass = "ClickhouseDB";
         public const string MySQLClass = "MySQLDB";
         public const string PostgresClass = "PostgresDB";
         public const string DummyClass = "DummyDB";
+                public const string FtpNoDBClass = "FtpNoDB";
+                 public const string FtpNoDBasVectClass = "FtpNoDBasVect";
+        
     }
 }

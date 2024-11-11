@@ -110,7 +110,7 @@ It has following content:
           <add key="PrintModeEnabled" value="false" />
           <add key="TestRetries" value="2" />
           <add key="DaySpan" value="1" />
-        <!-- Could be: DummyDB,  PostgresDB , DatalayertsDB , ClickhouseDB , TimescaleDB , InfluxDB -->
+        <!-- Could be: DummyDB, FtpNoDB, FtpNoDBasVect, PostgresDB , DatalayertsDB,  DatalayertsDBasVect , ClickhouseDB , TimescaleDB , InfluxDB -->
           <add key="TargetDatabase" value="DummyDB" />
           <add key="StartTime" value="2022-01-01T00:00:00.00" />
           <add key="RegularTsScaleMilliseconds" value="1000" /> 

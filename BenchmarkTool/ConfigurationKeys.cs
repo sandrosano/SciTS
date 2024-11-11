@@ -13,6 +13,9 @@ namespace BenchmarkTool
         public const string DatalayertsConnection = "DatalayertsConnection";
         public const string DatalayertsUser = "DatalayertsUser";
         public const string DatalayertsPassword = "DatalayertsPassword";
+          public const string FTPConnection = "FTPConnection";
+        public const string FTPUser = "FTPUser";
+        public const string FTPPassword = "FTPPassword";
         public const string RegularTsScaleMilliseconds = "RegularTsScaleMilliseconds";
         public const string TimescaleConnection = "TimescaleConnection";
         public const string MySQLConnection = "MySQLConnection";

@@ -18,6 +18,8 @@ namespace BenchmarkTool.Database
             {
                 case Constants.DatalayertsDBClass:
                     return new DatalayertsDB();
+                case Constants.DatalayertsDBasVectClass:
+                    return new DatalayertsDBasVect();
                 case Constants.TimescaleDBClass:
                     return new TimescaleDB();
                 case Constants.InfluxDBClass:
@@ -28,6 +30,10 @@ namespace BenchmarkTool.Database
                     return new PostgresDB();
                 case Constants.DummyClass:
                     return new DummyDB();
+                case Constants.FtpNoDBClass:
+                    return new FtpNoDB();
+                case Constants.FtpNoDBasVectClass:
+                    return new FtpNoDBasVect();
                 case Constants.MySQLClass:
                     return new MySQLDB();
                 case Constants.VictoriametricsDBClass:

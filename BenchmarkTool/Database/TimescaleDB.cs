@@ -10,8 +10,7 @@ using System.Threading.Tasks;
 using BenchmarkTool.Queries;
 using BenchmarkTool.Generators;
 using System.Diagnostics;
-using BenchmarkTool.Database.Queries;
-
+ 
 namespace BenchmarkTool.Database
 {
     public class TimescaleDB : IDatabase

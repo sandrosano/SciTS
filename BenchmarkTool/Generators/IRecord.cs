@@ -8,9 +8,7 @@ namespace BenchmarkTool.Generators
          double[] ValuesArray { get; set; }  
         DateTime Time { get; set; }
  
-        double getFirstValue(){
-            return ValuesArray[0];
-        }
+        double GetFirstValue();
 
     }
 }

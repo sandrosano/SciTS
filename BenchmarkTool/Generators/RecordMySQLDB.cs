@@ -27,7 +27,7 @@ namespace BenchmarkTool.Generators
             ValuesArray = values;
         }
 
-        double getFirstValue(){
+        public double GetFirstValue(){
             return ValuesArray[0];
         }
         public IEnumerator GetEnumerator()

@@ -6,10 +6,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="FluentFTP" Version="51.1.0" />
     <PackageReference Include="ClickHouse.Client" Version="6.8.1" />
-    <PackageReference Include="DataLayerTS.Client" Version="2.1.4" />
+    <PackageReference Include="DataLayerTS.Client" Version="2.1.9" />
     <PackageReference Include="ClickHouse.Ado" Version="2.0.2.2" />
     <PackageReference Include="InfluxDB.Client" Version="4.14.0" />
+    <PackageReference Include="MessagePack" Version="2.5.187" />
     <PackageReference Include="MySqlConnector" Version="2.3.1" />
     <PackageReference Include="Npgsql" Version="8.0.1" />
     <PackageReference Include="PostgreSQLCopyHelper" Version="2.8.0" />
@@ -20,6 +22,7 @@
     <PackageReference Include="Serilog" Version="3.1.1" />
     <PackageReference Include="Serilog.Sinks.Console" Version="5.0.1" />
     <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
+    <PackageReference Include="SSH.NET" Version="2024.1.0" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
     <PackageReference Include="xunit" Version="2.6.3" />
   </ItemGroup>

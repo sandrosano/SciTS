@@ -64,7 +64,18 @@ namespace BenchmarkTool
                     sensorIdsForThisClientList.Add(chosenSensor);
             }          
                 var batchStartdate = _date;
-                Batch batch = dataGenerator.GenerateBatch(_BatchSize, sensorIdsForThisClientList, batchStartdate, _DimNb);
+Batch batch ;
+
+                if (_targetDb.GetType().ToString().Contains("asVect") ) {
+                  batch = dataGenerator.GenerateBatch(_BatchSize, sensorIdsForThisClientList, batchStartdate, _DimNb, new RecordDatalayertsDirect(1,DateTime.Now,new double[] {1}) );
+
+                    }else{
+                       batch = dataGenerator.GenerateBatch(_BatchSize, sensorIdsForThisClientList, batchStartdate, _DimNb);
+
+                }
+               
+
+
                 var status = await _targetDb.WriteBatch(batch).ConfigureAwait(false);
                 Console.WriteLine($"[ClientID:{_chosenClientIndex}-Iteraton:{TestRetryWriteIteration}-Date:{batchStartdate}] {BenchmarkTool.Program.Mode}-{Config._actualMixedWLPercentage}% - {Config.GetTargetDatabase()} [Client Number{_chosenClientIndex} out of totalClNb:{_totalClientsNumber} - Batch Size {_BatchSize} - Sensors Numbers {String.Join( ';' , sensorIdsForThisClientList)} of {_SensorsNumber} with Dimensions:{status.PerformanceMetric.DimensionsNb}] Latency:{status.PerformanceMetric.Latency}");
                 status.Iteration = TestRetryWriteIteration;

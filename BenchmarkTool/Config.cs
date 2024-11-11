@@ -127,6 +127,31 @@ namespace BenchmarkTool
                 throw new Exception(String.Format("Null or empty app settings val for key={0}", ConfigurationKeys.DatalayertsPassword));
             return val;
         }
+
+
+        public static string GetFTPConnection()
+        {
+            var val = ConfigurationManager.AppSettings[ConfigurationKeys.FTPConnection];
+            if (String.IsNullOrEmpty(val))
+                throw new Exception(String.Format("Null or empty app settings val for key={0}", ConfigurationKeys.FTPConnection));
+            return val;
+        }
+        public static string GetFTPUser()
+        {
+            var val = ConfigurationManager.AppSettings[ConfigurationKeys.FTPUser];
+            if (String.IsNullOrEmpty(val))
+                throw new Exception(String.Format("Null or empty app settings val for key={0}", ConfigurationKeys.FTPUser));
+            return val;
+        }
+        public static string GetFTPPassword()
+        {
+            var val = ConfigurationManager.AppSettings[ConfigurationKeys.FTPPassword];
+            if (String.IsNullOrEmpty(val))
+                throw new Exception(String.Format("Null or empty app settings val for key={0}", ConfigurationKeys.FTPPassword));
+            return val;
+        }
+   
+
         public static int GetRegularTsScaleMilliseconds()
         {
             var val = ConfigurationManager.AppSettings[ConfigurationKeys.RegularTsScaleMilliseconds];

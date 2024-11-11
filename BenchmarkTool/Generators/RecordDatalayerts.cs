@@ -18,10 +18,10 @@ namespace BenchmarkTool.Generators
             Time = timestamp;
             ValuesArray = values;
         }
-        double getFirstValue(){
+        public double GetFirstValue(){
             return ValuesArray[0];
         }
-         public double[] ValuesArray { get; set; }
+        public double[] ValuesArray { get; set; }
 
         public int SensorID { get; set; }
 

@@ -8,7 +8,7 @@ namespace BenchmarkTool.Generators
         public int SensorID { get; set; }
         public double[] ValuesArray { get; set; }
         public DateTime Time { get; set; }
-        double getFirstValue()
+        public double GetFirstValue()
         {
             return ValuesArray[0];
         }

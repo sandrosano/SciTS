@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks.Dataflow;
 using InfluxDB.Client.Api.Domain;
@@ -9,7 +10,7 @@ namespace BenchmarkTool.Generators
 {
     public class ExtendedDataGenerator : IDataGenerator // does regular , random , single and polydimensional Data
     {
-        
+
         private Random _rnd = new Random();
         private int timeindex;
         static int _scaleMilliseconds = Config.GetRegularTsScaleMilliseconds();
@@ -87,6 +88,49 @@ namespace BenchmarkTool.Generators
             }
 
             return batch;
+        }
+
+
+        public Batch GenerateBatch(int batchSize, List<int> sensorIdsForThisClientList, DateTime date, int dimensions, RecordDatalayertsDirect overloadmarker) // DATALAYERTSDIRECT // date is here relative to the number of batches which have been written before and the Testretries
+        {
+
+
+            if (Config.GetIngestionType() == "regular")
+            {
+                InTypeReg = true;
+
+                RecordFactory recordFactory = new RecordFactory();
+                _rnd = new Random(7839);
+                var _Timestamp = date;
+
+                Batch batch = new Batch(dimensions* sensorIdsForThisClientList.Count);
+
+
+                int vectorSize = batchSize / sensorIdsForThisClientList.Count;
+
+
+
+
+
+                int index = 0;
+                while (index < dimensions * sensorIdsForThisClientList.Count)
+                {
+                    foreach (var chosenSensor in sensorIdsForThisClientList)
+                    {
+                        for(var chosenDim = 0; chosenDim< dimensions; chosenDim++)
+                        {
+
+
+                            batch.RecordsArray[index] = recordFactory.Create(chosenSensor, chosenDim, _Timestamp, GetInput(vectorSize));
+
+                            index++;
+                        }
+                    }
+                }
+
+                return batch;
+            }
+            else { throw new InvalidDataException(); }
         }
         private double[] GetInput(int dimensions)
         {

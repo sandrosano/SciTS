@@ -21,8 +21,10 @@ namespace BenchmarkTool.Generators
                 Constants.ClickhouseClass => new RecordClickhouse(sensorId, timestamp, value),
                 Constants.MySQLClass => new RecordMySQLDB(sensorId, timestamp, value),
                 Constants.DummyClass => new RecordMySQLDB(sensorId, timestamp, value),
+                Constants.FtpNoDBClass => new RecordMySQLDB(sensorId, timestamp, value),
+
                 Constants.PostgresClass => new RecordTimescaleDB(sensorId, timestamp, value),
-// VictoriaMetrics has not been tested successfully yet, there is an issue with inlux-protocoll line ingestion. 
+                // VictoriaMetrics has not been tested successfully yet, there is an issue with inlux-protocoll line ingestion. 
                 // Constants.VictoriametricsDBClass => new RecordVictoriametrics(sensorId, timestamp, values),
 
                 _ => throw new NotImplementedException(),
@@ -38,8 +40,22 @@ namespace BenchmarkTool.Generators
                 Constants.ClickhouseClass => new RecordClickhouse(sensorId, timestamp, values),
                 Constants.MySQLClass => new RecordMySQLDB(sensorId, timestamp, values),
                 Constants.DummyClass => new RecordMySQLDB(sensorId, timestamp, values),
+                Constants.FtpNoDBClass => new RecordMySQLDB(sensorId, timestamp, values),
                 Constants.PostgresClass => new RecordTimescaleDB(sensorId, timestamp, values),
-// VictoriaMetrics has not been tested successfully yet, there is an issue with inlux-protocoll line ingestion.
+                // VictoriaMetrics has not been tested successfully yet, there is an issue with inlux-protocoll line ingestion.
+                // Constants.VictoriametricsDBClass => new RecordVictoriametrics(sensorId, timestamp, values),
+
+                _ => throw new NotImplementedException(),
+            };
+
+        }
+        public IRecord Create(int sensorId, int dimId, DateTime timestamp, double[] values)
+        {
+            return database switch
+            {
+                Constants.DatalayertsDBasVectClass => new RecordDatalayertsDirect(sensorId, dimId, timestamp, values),
+                Constants.FtpNoDBasVectClass => new RecordDatalayertsDirect(sensorId, dimId, timestamp, values),
+                // VictoriaMetrics has not been tested successfully yet, there is an issue with inlux-protocoll line ingestion.
                 // Constants.VictoriametricsDBClass => new RecordVictoriametrics(sensorId, timestamp, values),
 
                 _ => throw new NotImplementedException(),
