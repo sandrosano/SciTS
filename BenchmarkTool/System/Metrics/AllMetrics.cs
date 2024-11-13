@@ -28,7 +28,7 @@ namespace BenchmarkTool.System.Metrics
         private string _database = Config.GetTargetDatabase();
         private int _dimensions = Config.GetDataDimensionsNr();
 
-        public void WriteToCSV(string path, string operation, int clientsNb, int batchSize, int sensorsNb)
+        public void WriteToCSV(string path, long iterationTimestamp,string operation, int clientsNb, int batchSize, int sensorsNb)
         {
             try
             {
@@ -43,7 +43,7 @@ namespace BenchmarkTool.System.Metrics
                             cw.NextRecord();
                         }
 
-                        var record = ToRecord(operation, clientsNb, batchSize, sensorsNb);
+                        var record = ToRecord(  iterationTimestamp,operation, clientsNb, batchSize, sensorsNb);
                         cw.WriteRecord<GlancesRecord>(record);
                         cw.NextRecord();
                     }
@@ -55,12 +55,12 @@ namespace BenchmarkTool.System.Metrics
             }
         }
 
-        public GlancesRecord ToRecord(string operation, int clientsNb, int batchSize, int sensorsNb)
+        public GlancesRecord ToRecord(long iterationTimestamp, string operation, int clientsNb, int batchSize, int sensorsNb)
         {
             return new GlancesRecord()
             {
                 Timestamp = Helper.GetMilliEpoch(),
-
+IterationTimestamp =  iterationTimestamp,
                 Database = _database,
                 Operation = operation,
                 ClientsNumber = clientsNb,
@@ -138,7 +138,7 @@ namespace BenchmarkTool.System.Metrics
         public class GlancesRecord
         {
             public long Timestamp { get; set; }
-
+public long IterationTimestamp { get; set; }
             public string Database { get; set; }
             public string Operation { get; set; }
             public int ClientsNumber { get; set; }

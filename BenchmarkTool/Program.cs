@@ -144,8 +144,9 @@ namespace BenchmarkTool
                         clientArray[chosenClientIndex - 1] = new ClientWrite(chosenClientIndex, totalClientsNb, Config.GetSensorNumber(), batchSize, dimNb, Config.GetStartTime().AddDays(dayAfterStartdate).AddMinutes(minute));
                     }
                     minute++;
-
-                    var glancesW = new GlancesStarter(Operation.BatchIngestion, totalClientsNb, batchSize, Config.GetSensorNumber());
+                    
+long iterationTimestamp = Helper.GetNanoEpoch();
+                    var glancesW = new GlancesStarter(Operation.BatchIngestion, totalClientsNb, batchSize, Config.GetSensorNumber(), iterationTimestamp,Config.GetGlancesOutput()+"-W");
                     var resultsW = new QueryStatusWrite[totalClientsNb];
                     await Parallel.ForEachAsync(Enumerable.Range(0, totalClientsNb), new ParallelOptions() { MaxDegreeOfParallelism = totalClientsNb }, async (index, token) => { resultsW[index] = await RunIngestionTask(clientArray[index]).ConfigureAwait(false); }).ConfigureAwait(false);
                     await glancesW.EndMonitorAsync().ConfigureAwait(false);
@@ -203,6 +204,9 @@ namespace BenchmarkTool
                             int loop = 0;
                             foreach (var batchSize in batchSizeArray)
                             {
+                                long iterationTimestamp = Helper.GetNanoEpoch();
+
+
                                 _currentWriteBatchSize = batchSize;
                                 _currentlimit = (int)((double)_currentWriteBatchSize * ((double)Config._actualMixedWLPercentage / 100));
                                 var date = Config.GetStartTime().AddDays(loop * daySpan);
@@ -211,7 +215,7 @@ namespace BenchmarkTool
                                 {
                                     clientArrayW[chosenClientIndex - 1] = new ClientWrite(chosenClientIndex, _currentWriteClientsNR, Config.GetSensorNumber(), batchSize, dimNb, date);
                                 }
-                                var glancesW = new GlancesStarter(Operation.BatchIngestion, _currentWriteClientsNR, batchSize, sensorsNb);
+                                var glancesW = new GlancesStarter(Operation.BatchIngestion, _currentWriteClientsNR, batchSize, sensorsNb, iterationTimestamp,Config.GetGlancesOutput()+"-W");
                                 var resultsW = new QueryStatusWrite[_currentWriteClientsNR];
                                 await Parallel.ForEachAsync(Enumerable.Range(0, _currentWriteClientsNR), new ParallelOptions() { MaxDegreeOfParallelism = _currentWriteClientsNR }, async (index, token) => { resultsW[index] = await RunIngestionTask(clientArrayW[index]).ConfigureAwait(false); }).ConfigureAwait(false);
                                 await glancesW.EndMonitorAsync().ConfigureAwait(false);
@@ -232,7 +236,7 @@ namespace BenchmarkTool
                                 foreach (string Query in Config._QueryArray)
                                 {
                                     Config.QueryTypeOnRunTime = Query;
-                                    var glancesR = new GlancesStarter(Config.QueryTypeOnRunTime.ToEnum<Operation>(), _currentClientsNR, batchSize, sensorsNb);
+                                    var glancesR = new GlancesStarter(Config.QueryTypeOnRunTime.ToEnum<Operation>(), _currentClientsNR, batchSize, sensorsNb, iterationTimestamp,Config.GetGlancesOutput()+"-R");
                                     var clientArrayR = new ClientRead[_currentReadClientsNR];
 
                                     for (int chosenClientIndex = 1; chosenClientIndex <= _currentReadClientsNR; chosenClientIndex++)
@@ -293,7 +297,7 @@ namespace BenchmarkTool
                             int loop = 0;
 
                             foreach (var batchSize in batchSizeArray)
-                            {
+                            {long iterationTimestamp = Helper.GetNanoEpoch();
                                 _currentWriteBatchSize = batchSize;
 
                                 if (_TestRetryIteration > Config.GetTestRetries())
@@ -308,7 +312,7 @@ namespace BenchmarkTool
                                 {
                                     clientArrayW[chosenClientIndex - 1] = new ClientWrite(chosenClientIndex, totalClientsNb, Config.GetSensorNumber(), batchSize, dimNb, date);
                                 }
-                                var glancesW = new GlancesStarter(Operation.BatchIngestion, totalClientsNb, batchSize, sensorsNb);
+                                var glancesW = new GlancesStarter(Operation.BatchIngestion, totalClientsNb, batchSize, sensorsNb, iterationTimestamp,Config.GetGlancesOutput()+"-W");
                                 var resultsW = new QueryStatusWrite[totalClientsNb];
                                 await Parallel.ForEachAsync(Enumerable.Range(0, totalClientsNb), new ParallelOptions() { MaxDegreeOfParallelism = totalClientsNb }, async (index, token) => { resultsW[index] = (await RunIngestionTask(clientArrayW[index]).ConfigureAwait(false)); }).ConfigureAwait(false);
                                 await glancesW.EndMonitorAsync().ConfigureAwait(false);
@@ -352,6 +356,7 @@ namespace BenchmarkTool
                             Config._actualDataDimensionsNr = dimNb;
                             foreach (string Query in Config._QueryArray)
                             {
+                                long iterationTimestamp = Helper.GetNanoEpoch();
                                 if (_TestRetryIteration > Config.GetTestRetries())
                                 {
                                     _currentReadClientsNR = clientNumberArray.Last() + 1;
@@ -362,7 +367,7 @@ namespace BenchmarkTool
                                 var client = new ClientRead();
                                 var sensorsNb = Config.GetSensorNumber();
 
-                                var glancesR = new GlancesStarter(Config.QueryTypeOnRunTime.ToEnum<Operation>(), _currentClientsNR, _currentlimit, sensorsNb);
+                                var glancesR = new GlancesStarter(Config.QueryTypeOnRunTime.ToEnum<Operation>(), _currentClientsNR, _currentlimit, sensorsNb, iterationTimestamp,Config.GetGlancesOutput()+"-R");
                                 var clientArrayR = new ClientRead[totalClientsNb];
 
                                 for (int chosenClientIndex = 1; chosenClientIndex <= totalClientsNb; chosenClientIndex++)

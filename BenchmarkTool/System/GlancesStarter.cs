@@ -24,17 +24,20 @@ namespace BenchmarkTool.System
         private int _clientsNb;
         private int _batchSize;
         private int _sensorsNb;
+        private long _iterationTimestamp;
 
         private CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
 
-        public GlancesStarter(Operation operation, int clientsNb, int batchSize, int sensorsNb)
-        {
+
+ 
+        public GlancesStarter(Operation operation, int clientsNb, int batchSize, int sensorsNb,long iterationTimestamp , string pathWithoutEnding)
+        {  _iterationTimestamp= iterationTimestamp  ;
             _baseUrl = Config.GetGlancesUrl();
             _databasePid = Config.GetGlancesDatabasePid();
             _period = Config.GetGlancesPeriod();
             _nic = Config.GetGlancesNIC();
             _disk = Config.GetGlancesDisk();
-            _path = Config.GetGlancesOutput();
+            _path = pathWithoutEnding +".csv";
             _operation = operation;
             _clientsNb = clientsNb;
             _batchSize = batchSize;
@@ -85,7 +88,7 @@ namespace BenchmarkTool.System
             await _thread.ConfigureAwait(false);
             foreach (var item in _metrics)
             {
-                item.WriteToCSV(_path, _operation.ToString(), _clientsNb, _batchSize, _sensorsNb);
+                item.WriteToCSV(_path,   _iterationTimestamp,_operation.ToString(), _clientsNb, _batchSize, _sensorsNb);
             }
             _cancellationTokenSource.Dispose();
             _thread.Dispose();

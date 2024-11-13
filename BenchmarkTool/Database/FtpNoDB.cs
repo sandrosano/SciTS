@@ -71,7 +71,7 @@ namespace BenchmarkTool.Database
 
     
 
-                var name = "test-row-file-Dim" +
+                var name = "test-row-"+BenchmarkTool.Program.Mode.ToString()+"-Dim" +
                 Config._actualDataDimensionsNr.ToString()+"-bs"+
                 batch.Size.ToString()+  "time"
                 

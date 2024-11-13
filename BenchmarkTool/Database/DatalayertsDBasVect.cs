@@ -5,6 +5,7 @@ using System;
 using System.Linq;
 using System.IO;
 using System.Text;
+using System.Text.Json;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using BenchmarkTool.Queries;
@@ -101,7 +102,7 @@ namespace BenchmarkTool.Database
                     {
                         FirstTimestamp = roundedDate,
                         IntervalTicks = 10000 * Config.GetRegularTsScaleMilliseconds(), // second = 10mil
-                        LastTimestamp = roundedDate.AddMilliseconds(anzahlTimestepsPerDimSensor * Config.GetRegularTsScaleMilliseconds())
+                        LastTimestamp = roundedDate.AddMilliseconds(anzahlTimestepsPerDimSensor * Config.GetRegularTsScaleMilliseconds()-1000)
                     };
 
                     vectorContainer.Vectors = new TimeSeriesVector<double>[batch.RecordsArray.Length];
@@ -117,12 +118,9 @@ namespace BenchmarkTool.Database
                             vectorContainer.Vectors[vectorID] = new TimeSeriesVector<double>();
 
                             vectorContainer.Vectors[vectorID].Directory = GetDirectoryName();
-
-                            if (batch.RecordsArray.First() is RecordDatalayertsDirect)
-                            {
+ 
                                 vectorContainer.Vectors[vectorID].Series = "sensor_id_" + currentVector.SensorID + $"_{Constants.Value}_" + currentVector.GetFirstValue();
-                            }
-                            else { throw new InvalidDataException(); }
+                     
                             vectorContainer.Vectors[vectorID].Values = currentVector.ValuesArray;
                             vectorID++;
                         }
@@ -130,6 +128,7 @@ namespace BenchmarkTool.Database
 
                     }
                 }
+
 
                 Stopwatch sw2 = Stopwatch.StartNew();
                 await _client.IngestVectorsAsync<double>(vectorContainer, OverwriteMode.older, TimeSeriesCreationTimestampStorageType.NONE, default).ConfigureAwait(false);

@@ -1,4 +1,3 @@
-<div class="itables">
 <style>.itables table td {
     text-overflow: ellipsis;
     overflow: hidden;
@@ -20,11 +19,9 @@
     padding: 3px;
     box-sizing: border-box;
 }
-
-.itables { font-size: medium; }
 </style>
-<table id="itables_53653cf2_8a10_429f_a35d_80cb395b7a49" class="display nowrap" data-quarto-disable-processing="true" style="table-layout:auto;width:auto;margin:auto;caption-side:bottom">
-<thead>
+<div class="itables">
+<table id="67a70238-0502-4030-acd2-244fb36578b5" class="display nowrap"style="table-layout:auto;width:auto;margin:auto;caption-side:bottom"><thead>
     <tr style="text-align: right;">
       
       <th>System</th>
@@ -32,9 +29,7 @@
       <th>BatchSize</th>
       <th>MB_per_Sec</th>
     </tr>
-  </thead><tbody><tr><td>Loading... (need <a href=https://mwouts.github.io/itables/troubleshooting.html>help</a>?)</td></tr></tbody>
-
-</table>
+  </thead><tbody><tr><td>Loading... (need <a href=https://mwouts.github.io/itables/troubleshooting.html>help</a>?)</td></tr></tbody></table>
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css">
 <script type="module">
     // Import jquery and DataTable
@@ -42,18 +37,16 @@
     import dt from 'https://cdn.datatables.net/1.12.1/js/jquery.dataTables.mjs';
     dt($);
 
+    // Define the table data
+    const data = [["ClickHouse", "dedicated_irregular", 1000, 15.633806], ["ClickHouse", "dedicated_irregular", 10000, 25.879375], ["ClickHouse", "dedicated_irregular", 30000, 41.412786], ["ClickHouse", "dedicated_irregular", 60000, 39.462413], ["ClickHouse", "dedicated_regular", 1000, 15.830005], ["ClickHouse", "dedicated_regular", 10000, 26.4687], ["ClickHouse", "dedicated_regular", 30000, 40.056124], ["ClickHouse", "dedicated_regular", 60000, 38.94842], ["DataLayerTS", "dedicated_irregular", 1000, 0.289655], ["DataLayerTS", "dedicated_irregular", 10000, 1.913004], ["DataLayerTS", "dedicated_irregular", 30000, 2.799059], ["DataLayerTS", "dedicated_irregular", 60000, 3.533463], ["DataLayerTS", "dedicated_regular", 1000, 0.244897], ["DataLayerTS", "dedicated_regular", 10000, 10.467945], ["DataLayerTS", "dedicated_regular", 30000, 132.54923], ["DataLayerTS", "dedicated_regular", 60000, 342.325113], ["InFlux", "dedicated_irregular", 1000, 0.179906], ["InFlux", "dedicated_irregular", 10000, 0.195834], ["InFlux", "dedicated_irregular", 30000, 0.167666], ["InFlux", "dedicated_irregular", 60000, 0.163041], ["InFlux", "dedicated_regular", 1000, 0.295118], ["InFlux", "dedicated_regular", 10000, 0.309575], ["InFlux", "dedicated_regular", 30000, 0.254107], ["InFlux", "dedicated_regular", 60000, 0.250401], ["TimeScale", "dedicated_irregular", 1000, 20.0219], ["TimeScale", "dedicated_irregular", 10000, 41.689954], ["TimeScale", "dedicated_irregular", 30000, 47.841721], ["TimeScale", "dedicated_irregular", 60000, 47.549876], ["TimeScale", "dedicated_regular", 1000, 50.192834], ["TimeScale", "dedicated_regular", 10000, 96.230945], ["TimeScale", "dedicated_regular", 30000, 85.104203], ["TimeScale", "dedicated_regular", 60000, 81.99481]];
+
+    // Define the dt_args
+    let dt_args = {"order": []};
+    dt_args["data"] = data;
+
     $(document).ready(function () {
-        document.querySelectorAll("#itables_53653cf2_8a10_429f_a35d_80cb395b7a49:not(.dataTable)").forEach(table => {
-            // Define the table data
-            const data = [["ClickhouseDB", "dedicated_irregular", 1000, 15.633806], ["ClickhouseDB", "dedicated_irregular", 10000, 25.879375], ["ClickhouseDB", "dedicated_irregular", 30000, 41.412786], ["ClickhouseDB", "dedicated_irregular", 60000, 39.462413], ["ClickhouseDB", "dedicated_regular", 1000, 15.830005], ["ClickhouseDB", "dedicated_regular", 10000, 26.4687], ["ClickhouseDB", "dedicated_regular", 30000, 40.056124], ["ClickhouseDB", "dedicated_regular", 60000, 38.94842], ["DatalayertsDB", "dedicated_irregular", 1000, 0.289655], ["DatalayertsDB", "dedicated_irregular", 10000, 1.913004], ["DatalayertsDB", "dedicated_irregular", 30000, 2.799059], ["DatalayertsDB", "dedicated_irregular", 60000, 3.533463], ["DatalayertsDB", "dedicated_regular", 1000, 0.244897], ["DatalayertsDB", "dedicated_regular", 10000, 10.467945], ["DatalayertsDB", "dedicated_regular", 30000, 132.54923], ["DatalayertsDB", "dedicated_regular", 60000, 342.325113], ["InfluxDB", "dedicated_irregular", 1000, 9.935096], ["InfluxDB", "dedicated_irregular", 10000, 13.425016], ["InfluxDB", "dedicated_irregular", 30000, 13.705598], ["InfluxDB", "dedicated_irregular", 60000, 17.177143], ["InfluxDB", "dedicated_regular", 1000, 11.163494], ["InfluxDB", "dedicated_regular", 10000, 15.16426], ["InfluxDB", "dedicated_regular", 30000, 16.303788], ["InfluxDB", "dedicated_regular", 60000, 18.510243], ["TimescaleDB", "dedicated_irregular", 1000, 20.0219], ["TimescaleDB", "dedicated_irregular", 10000, 41.689954], ["TimescaleDB", "dedicated_irregular", 30000, 47.841721], ["TimescaleDB", "dedicated_irregular", 60000, 47.549876], ["TimescaleDB", "dedicated_regular", 1000, 50.192834], ["TimescaleDB", "dedicated_regular", 10000, 96.230945], ["TimescaleDB", "dedicated_regular", 30000, 85.104203], ["TimescaleDB", "dedicated_regular", 60000, 81.99481]];
-
-            // Define the dt_args
-            let dt_args = {"order": []};
-            dt_args["data"] = data;
-
-            
-            new $.fn.dataTable(table, dt_args);
-        });
+        
+        $('#67a70238-0502-4030-acd2-244fb36578b5').DataTable(dt_args);
     });
 </script>
 </div>

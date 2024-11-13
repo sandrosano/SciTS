@@ -72,7 +72,7 @@ namespace BenchmarkTool.Database
 
     
 
-                var name = "test-vector-file-"+
+                var name = "test-vector-"+BenchmarkTool.Program.Mode.ToString()+"-"+
                 Config._actualDataDimensionsNr.ToString()+"-bs"+
                 batch.Size.ToString()+  "time"
                 
