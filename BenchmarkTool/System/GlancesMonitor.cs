@@ -22,49 +22,49 @@ namespace BenchmarkTool.System
 
         public async Task<Cpu> GetCpuAsync()
         {
-            var request = new RestRequest("/api/3/cpu");
+            var request = new RestRequest("cpu");
             return await _client.GetAsync<Cpu>(request );
         }
 
         public async Task<List<DiskIO>> GetDiskIOAsync()
         {
-            var request = new RestRequest("/api/3/diskio");
+            var request = new RestRequest("diskio");
             return await _client.GetAsync<List<DiskIO>>(request ); 
         } 
 
         public async Task<Memory> GetMemoryAsync()
         {
-            var request = new RestRequest("/api/3/mem");
+            var request = new RestRequest("mem");
             return await _client.GetAsync<Memory>(request );
         }
 
         public async Task<Swap> GetSwapAsync()
         {
-            var request = new RestRequest("/api/3/memswap");
+            var request = new RestRequest("memswap");
             return await _client.GetAsync<Swap>(request );
         }
 
         public async Task<List<Network>> GetNetworkAsync() 
         {
-            var request = new RestRequest("/api/3/network");
+            var request = new RestRequest("network");
             return await _client.GetAsync<List<Network>>(request );
         }
         
         public async Task<List<FS>> GetFSAsync()  
         {
-            var request = new RestRequest("/api/3/fs");
+            var request = new RestRequest("fs");
             return await _client.GetAsync<List<FS>>(request );
         }
 
         public async Task<DatabaseProcess> GetDatabaseProcessAsync(int pid)
         {
-            var request = new RestRequest($"/api/3/processlist/pid/{pid}");
+            var request = new RestRequest($"processlist/pid/{pid}");
             return await _client.GetAsync<DatabaseProcess>(request );
         }
          public async Task<AllMetrics> GetAllAsync(int pid, string nic, string disk, string fs)
         {
             var cpuAsync = GetCpuAsync();
-            var processAsync = GetDatabaseProcessAsync(pid);
+            // var processAsync =  GetDatabaseProcessAsync(pid);
             var diskIOAsync = GetDiskIOAsync();
             var memoryAsync = GetMemoryAsync();
             var networkAsync = GetNetworkAsync();
