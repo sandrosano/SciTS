@@ -74,7 +74,7 @@ namespace BenchmarkTool.System
             var metrics = new AllMetrics()  
             {  
                 Cpu = await cpuAsync,
-                DatabaseProcess = await processAsync,
+                DatabaseProcess = null,
                 DiskIO = (await diskIOAsync).Find(d => d.DiskName == disk),
                 Memory = await memoryAsync,
                 Network = (await networkAsync).Find(n => n.InterfaceName == nic),

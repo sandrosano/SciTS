@@ -121,17 +121,17 @@ IterationTimestamp =  iterationTimestamp,
                 NetworkIsUp = this.Network.IsUp,
                 NetworkSpeed = this.Network.Speed,
 
-                // Process
-                ProcessCpuPercent = this.DatabaseProcess.CpuPercent,
-                // user, system, children_user, children_system, iowait (in clock ticks)
-                ProcessCpuTimes = string.Join('|', this.DatabaseProcess.CpuTimes),
-                // read_count, write_count, read_bytes, write_bytes
-                ProcessIOCounters = string.Join('|', this.DatabaseProcess.IOCounters),
-                //rss, vms, shared, text, lib, data, dirty
-                ProcessMemoryInfo = string.Join('|', this.DatabaseProcess.MemoryInfo),
-                ProcessMemoryPercent = this.DatabaseProcess.MemoryPercent,
-                ProcessThreadsNumber = this.DatabaseProcess.ThreadsNumber,
-                ProcessStatus = this.DatabaseProcess.Status,
+                // // Process
+                // ProcessCpuPercent = this.DatabaseProcess.CpuPercent,
+                // // user, system, children_user, children_system, iowait (in clock ticks)
+                // ProcessCpuTimes = string.Join('|', this.DatabaseProcess.CpuTimes),
+                // // read_count, write_count, read_bytes, write_bytes
+                // ProcessIOCounters = string.Join('|', this.DatabaseProcess.IOCounters),
+                // //rss, vms, shared, text, lib, data, dirty
+                // ProcessMemoryInfo = string.Join('|', this.DatabaseProcess.MemoryInfo),
+                // ProcessMemoryPercent = this.DatabaseProcess.MemoryPercent,
+                // ProcessThreadsNumber = this.DatabaseProcess.ThreadsNumber,
+                // ProcessStatus = this.DatabaseProcess.Status,
             };
         }
 
