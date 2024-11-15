@@ -16,18 +16,19 @@ namespace BenchmarkTool
         private IDatabase _targetDb;
         private int _daySpan;
 
+        public long _iterationTimestamp { get; private set; }
         public int _chosenClientIndex { get; private set; }
-        public int _totalClientsNumber { get;   set; }
+        public int _totalClientsNumber { get; set; }
         public int _SensorsNumber { get; private set; }
         public int _BatchSize { get; private set; }
         public int _DimNb { get; private set; }
 
-        public ClientWrite(int chosenClientIndex, int totalClientsNumber, int sensorNumber, int batchSize, int dimNb, DateTime date)
+        public ClientWrite(long iterationTimestamp, int chosenClientIndex, int totalClientsNumber, int sensorNumber, int batchSize, int dimNb, DateTime date)
         {
             try
             {
- Thread.CurrentThread.CurrentCulture =  CultureInfo.InvariantCulture;
-
+                Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
+                _iterationTimestamp = iterationTimestamp;
                 _chosenClientIndex = chosenClientIndex;
                 _totalClientsNumber = totalClientsNumber;
                 _SensorsNumber = sensorNumber;
@@ -58,33 +59,37 @@ namespace BenchmarkTool
             if (_totalClientsNumber > _SensorsNumber) throw new ArgumentException("clientsnr  must be lower or equal then sensornumber for reg.TS ingestion");
 
             List<int> sensorIdsForThisClientList = new List<int>();
-            for (int chosenSensor = 1; chosenSensor <= _SensorsNumber; chosenSensor++)  
+            for (int chosenSensor = 1; chosenSensor <= _SensorsNumber; chosenSensor++)
             {
                 if (chosenSensor % _totalClientsNumber == _chosenClientIndex - 1)
                     sensorIdsForThisClientList.Add(chosenSensor);
-            }          
-                var batchStartdate = _date;
-Batch batch ;
+            }
+            var batchStartdate = _date;
+            Batch batch;
 
-                if (_targetDb.GetType().ToString().Contains("asVect") ) {
-                  batch = dataGenerator.GenerateBatch(_BatchSize, sensorIdsForThisClientList, batchStartdate, _DimNb, new RecordDatalayertsDirect(1,DateTime.Now,new double[] {1}) );
+            if (_targetDb.GetType().ToString().Contains("asVect"))
+            {
+                batch = dataGenerator.GenerateBatch(_BatchSize, sensorIdsForThisClientList, batchStartdate, _DimNb, new RecordDatalayertsDirect(1, DateTime.Now, new double[] { 1 }));
 
-                    }else{
-                       batch = dataGenerator.GenerateBatch(_BatchSize, sensorIdsForThisClientList, batchStartdate, _DimNb);
+            }
+            else
+            {
+                batch = dataGenerator.GenerateBatch(_BatchSize, sensorIdsForThisClientList, batchStartdate, _DimNb);
 
-                }
-               
+            }
 
 
-                var status = await _targetDb.WriteBatch(batch).ConfigureAwait(false);
-                Console.WriteLine($"[ClientID:{_chosenClientIndex}-Iteraton:{TestRetryWriteIteration}-Date:{batchStartdate}] {BenchmarkTool.Program.Mode}-{Config._actualMixedWLPercentage}% - {Config.GetTargetDatabase()} [Client Number{_chosenClientIndex} out of totalClNb:{_totalClientsNumber} - Batch Size {_BatchSize} - Sensors Numbers {String.Join( ';' , sensorIdsForThisClientList)} of {_SensorsNumber} with Dimensions:{status.PerformanceMetric.DimensionsNb}] Latency:{status.PerformanceMetric.Latency}");
-                status.Iteration = TestRetryWriteIteration;
-                status.Client = _chosenClientIndex;
-                status.StartDate=batchStartdate;
 
-                swC.Stop();
-                status.PerformanceMetric.ClientLatency = swC.Elapsed.TotalMicroseconds;
-                            
+            var status = await _targetDb.WriteBatch(batch).ConfigureAwait(false);
+            Console.WriteLine($"[ClientID:{_chosenClientIndex}-Iteraton:{TestRetryWriteIteration}-Date:{batchStartdate}] {BenchmarkTool.Program.Mode}-{Config._actualMixedWLPercentage}% - {Config.GetTargetDatabase()} [Client Number{_chosenClientIndex} out of totalClNb:{_totalClientsNumber} - Batch Size {_BatchSize} - Sensors Numbers {String.Join(';', sensorIdsForThisClientList)} of {_SensorsNumber} with Dimensions:{status.PerformanceMetric.DimensionsNb}] Latency:{status.PerformanceMetric.Latency}");
+            status.Iteration = TestRetryWriteIteration;
+            status.Client = _chosenClientIndex;
+            status.StartDate = batchStartdate;
+            status.IterationTimestamp=_iterationTimestamp;
+
+            swC.Stop();
+            status.PerformanceMetric.ClientLatency = swC.Elapsed.TotalMicroseconds;
+
             _targetDb.Cleanup();
             _targetDb.Close();
             return status;
@@ -114,6 +119,7 @@ Batch batch ;
                     Console.WriteLine($"[ClientID{_chosenClientIndex}-Iteration:{i}-{batchStartdate}] {BenchmarkTool.Program.Mode}-{Config._actualMixedWLPercentage}% - {Config.GetTargetDatabase()} [Client Number{_chosenClientIndex} out of totalClNb:{_totalClientsNumber}  - Batch Size {_BatchSize} - Sensors Number {_SensorsNumber}] {status.PerformanceMetric.Latency}");
                     status.Iteration = i;
                     status.Client = _chosenClientIndex;
+                          status.IterationTimestamp=_iterationTimestamp;
                     statuses.Add(status);
                 }
             }

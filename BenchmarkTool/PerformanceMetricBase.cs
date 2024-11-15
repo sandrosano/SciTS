@@ -27,6 +27,6 @@ namespace BenchmarkTool
 
         public Operation PerformedOperation { get; }
 
-        public abstract T ToLogRecord(string mode, int percentage, long timestamp, DateTime startDate,  int batchSize, int clientsNb, int sensorNb, int client, int iteration, int dimNb);
+        public abstract T ToLogRecord(string mode, int percentage, long timestamp,long iterationTimestamp, DateTime startDate,  int batchSize, int clientsNb, int sensorNb, int client, int iteration, int dimNb);
     }
 }

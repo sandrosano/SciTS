@@ -5,6 +5,7 @@ namespace BenchmarkTool
     public class LogRecordWrite
     {
         public long Date { get; }
+        public long IterationTimestamp  { get; set; }
         public double SucceededDataPoints { get; }
         public double FailedDataPoints { get; }
         public string Operation { get; }
@@ -21,10 +22,11 @@ namespace BenchmarkTool
         public int Iteration { get; }
         public int Dimensions { get; }
 
-        public LogRecordWrite(double latency,  double clientlatency, double succeededPoints, long epoch, DateTime startDate,
+        public LogRecordWrite(double latency,  double clientlatency, double succeededPoints, long epoch,   long iterationTimestamp,DateTime startDate,
                                 double failedPoints, Operation operation, string mode, int percentage, int clientsNb,
                                 int batchSize, int sensorsNb, int client, int iteration, int dimNb)
         {
+            IterationTimestamp= iterationTimestamp;
             Latency = latency;
             ClientLatency = clientlatency;
             SucceededDataPoints = succeededPoints;

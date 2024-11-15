@@ -137,15 +137,15 @@ namespace BenchmarkTool
                 Config._actualDataDimensionsNr = dimNb;
 
                 while (minute < hours * 60) // if not all day ingested, continue
-                {
+                { long iterationTimestamp = Helper.GetNanoEpoch();
                     var clientArray = new ClientWrite[totalClientsNb];
                     for (var chosenClientIndex = 1; chosenClientIndex <= totalClientsNb; chosenClientIndex++)
                     {
-                        clientArray[chosenClientIndex - 1] = new ClientWrite(chosenClientIndex, totalClientsNb, Config.GetSensorNumber(), batchSize, dimNb, Config.GetStartTime().AddDays(dayAfterStartdate).AddMinutes(minute));
+                        clientArray[chosenClientIndex - 1] = new ClientWrite(iterationTimestamp,chosenClientIndex, totalClientsNb, Config.GetSensorNumber(), batchSize, dimNb, Config.GetStartTime().AddDays(dayAfterStartdate).AddMinutes(minute));
                     }
                     minute++;
                     
-long iterationTimestamp = Helper.GetNanoEpoch();
+
                     var glancesW = new GlancesStarter(Operation.BatchIngestion, totalClientsNb, batchSize, Config.GetSensorNumber(), iterationTimestamp,Config.GetGlancesOutput()+"-W");
                     var resultsW = new QueryStatusWrite[totalClientsNb];
                     await Parallel.ForEachAsync(Enumerable.Range(0, totalClientsNb), new ParallelOptions() { MaxDegreeOfParallelism = totalClientsNb }, async (index, token) => { resultsW[index] = await RunIngestionTask(clientArray[index]).ConfigureAwait(false); }).ConfigureAwait(false);
@@ -155,7 +155,7 @@ long iterationTimestamp = Helper.GetNanoEpoch();
                         foreach (var result in resultsW)
                         {
                             var recordW = result.PerformanceMetric.ToLogRecord(Mode, 0,
-                                result.Timestamp, result.StartDate, batchSize, totalClientsNb, Config.GetSensorNumber(),
+                                result.Timestamp,result.IterationTimestamp,result.StartDate, batchSize, totalClientsNb, Config.GetSensorNumber(),
                                 result.Client, result.Iteration, dimNb);
                             csvLoggerW.WriteRecord(recordW);
                         }
@@ -213,7 +213,7 @@ long iterationTimestamp = Helper.GetNanoEpoch();
                                 var clientArrayW = new ClientWrite[_currentWriteClientsNR];
                                 for (var chosenClientIndex = 1; chosenClientIndex <= _currentWriteClientsNR; chosenClientIndex++)
                                 {
-                                    clientArrayW[chosenClientIndex - 1] = new ClientWrite(chosenClientIndex, _currentWriteClientsNR, Config.GetSensorNumber(), batchSize, dimNb, date);
+                                    clientArrayW[chosenClientIndex - 1] = new ClientWrite(iterationTimestamp,chosenClientIndex, _currentWriteClientsNR, Config.GetSensorNumber(), batchSize, dimNb, date);
                                 }
                                 var glancesW = new GlancesStarter(Operation.BatchIngestion, _currentWriteClientsNR, batchSize, sensorsNb, iterationTimestamp,Config.GetGlancesOutput()+"-W");
                                 var resultsW = new QueryStatusWrite[_currentWriteClientsNR];
@@ -225,7 +225,7 @@ long iterationTimestamp = Helper.GetNanoEpoch();
                                     foreach (var result in resultsW)
                                     {
                                         var recordW = result.PerformanceMetric.ToLogRecord(Mode, percentage,
-                                            result.Timestamp, result.StartDate, batchSize, _currentWriteClientsNR, sensorsNb,
+                                            result.Timestamp,result.IterationTimestamp, result.StartDate, batchSize, _currentWriteClientsNR, sensorsNb,
                                             result.Client, result.Iteration, dimNb);
                                         csvLoggerW.WriteRecord(recordW);
                                     }
@@ -252,7 +252,7 @@ long iterationTimestamp = Helper.GetNanoEpoch();
                                     {
                                         foreach (var result in resultsR)
                                         {
-                                            var recordR = result.PerformanceMetric.ToLogRecord(Mode, percentage, result.Timestamp, result.StartDate, batchSize, _currentReadClientsNR, sensorsNb,
+                                            var recordR = result.PerformanceMetric.ToLogRecord(Mode, percentage, result.Timestamp,result.IterationTimestamp, result.StartDate, batchSize, _currentReadClientsNR, sensorsNb,
                                             result.Client, result.Iteration, dimNb);
                                             csvLoggerR.WriteRecord(recordR);
                                         }
@@ -310,7 +310,7 @@ long iterationTimestamp = Helper.GetNanoEpoch();
 
                                 for (var chosenClientIndex = 1; chosenClientIndex <= totalClientsNb; chosenClientIndex++)
                                 {
-                                    clientArrayW[chosenClientIndex - 1] = new ClientWrite(chosenClientIndex, totalClientsNb, Config.GetSensorNumber(), batchSize, dimNb, date);
+                                    clientArrayW[chosenClientIndex - 1] = new ClientWrite(iterationTimestamp, chosenClientIndex, totalClientsNb, Config.GetSensorNumber(), batchSize, dimNb, date);
                                 }
                                 var glancesW = new GlancesStarter(Operation.BatchIngestion, totalClientsNb, batchSize, sensorsNb, iterationTimestamp,Config.GetGlancesOutput()+"-W");
                                 var resultsW = new QueryStatusWrite[totalClientsNb];
@@ -323,7 +323,7 @@ long iterationTimestamp = Helper.GetNanoEpoch();
                                     foreach (var result in resultsW)
                                     {
                                         var record = result.PerformanceMetric.ToLogRecord(Mode, 0,
-                                            result.Timestamp, result.StartDate, batchSize, totalClientsNb, sensorsNb,
+                                            result.Timestamp,result.IterationTimestamp, result.StartDate, batchSize, totalClientsNb, sensorsNb,
                                             result.Client, result.Iteration, dimNb);
                                         csvLoggerW.WriteRecord(record);
                                     }
@@ -382,7 +382,7 @@ long iterationTimestamp = Helper.GetNanoEpoch();
                                 {
                                     foreach (var result in resultsR)
                                     {
-                                        var record = result.PerformanceMetric.ToLogRecord(Mode, -1, result.Timestamp, result.StartDate, _currentlimit, totalClientsNb, sensorsNb,
+                                        var record = result.PerformanceMetric.ToLogRecord(Mode, -1, result.Timestamp,result.IterationTimestamp, result.StartDate, _currentlimit, totalClientsNb, sensorsNb,
                                           result.Client, result.Iteration, dimNb);
                                         csvLogger.WriteRecord(record);
                                     }

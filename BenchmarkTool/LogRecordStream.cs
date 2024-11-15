@@ -2,7 +2,7 @@ using System;
 
 namespace BenchmarkTool
 {
-    public class LogRecordStream
+    public class LogRecordStream // not in use, deprecated
     {
         public long Duration { get; }
         public long SucceededDataPoints { get; }

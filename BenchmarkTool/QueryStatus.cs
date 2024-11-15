@@ -13,6 +13,7 @@ namespace BenchmarkTool
         public DateTime StartDate { get; set; }     
         public T PerformanceMetric { get; }
         public long Timestamp { get; }
+        public long IterationTimestamp  { get; set; }
 
         public QueryStatus(bool succeeded, T metric)
         {

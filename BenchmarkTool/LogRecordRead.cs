@@ -5,6 +5,7 @@ namespace BenchmarkTool
     public class LogRecordRead
     {
         public long Date { get; }
+        public long IterationTimestamp  { get; set; }
         public double SucceededDataPoints { get; }
         public double FailedDataPoints { get; }
         public string Operation { get; }
@@ -23,10 +24,11 @@ namespace BenchmarkTool
 
         public int Dimensions { get; }
 
-        public LogRecordRead(double latency, double clientlatency, double succeededPoints, long epoch, int sensNb,
+        public LogRecordRead(double latency, double clientlatency, double succeededPoints, long epoch, long iterationTimestamp, int sensNb,
                             double failedPoints, Operation operation, string mode,int percentage, int client, int clientsNb,
                             DateTime startDate, long duration, int aggregation, int iteration, int dimNb)
         {
+            IterationTimestamp= iterationTimestamp;
             SensorsNumber = sensNb;
             Latency = latency;
             ClientLatency = clientlatency;

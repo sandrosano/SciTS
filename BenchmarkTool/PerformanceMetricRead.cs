@@ -24,11 +24,11 @@ namespace BenchmarkTool
             StartDate = date;
         }
 
-        public override LogRecordRead ToLogRecord(string mode,  int percentage,long timestamp, DateTime startDate, int batchSize,
+        public override LogRecordRead ToLogRecord(string mode,  int percentage,long timestamp ,long iterationTimestamp, DateTime startDate, int batchSize,
                                                 int clientsNb, int sensorNb,
                                                 int client, int iteration, int dimNb)
         {
-            return new LogRecordRead(Latency,ClientLatency, SucceededDataPoints, timestamp, sensorNb,
+            return new LogRecordRead(Latency,ClientLatency, SucceededDataPoints, timestamp,   iterationTimestamp,  sensorNb,
                                     FailedDataPoints, PerformedOperation, mode,   percentage,client, clientsNb,
                                     StartDate, Duration, Aggregation,iteration ,dimNb);
         }

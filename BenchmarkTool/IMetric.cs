@@ -17,7 +17,7 @@ namespace BenchmarkTool
         string Mode { get;}
         int Percentage { get; }
 
-        T ToLogRecord( string mode, int percentage, long timestamp, DateTime startDate, int batchSize, int clientsNb, int sensorNb, int client, int iteration, int dimNb);
+        T ToLogRecord( string mode, int percentage, long timestamp, long iterationTimestamp,DateTime startDate, int batchSize, int clientsNb, int sensorNb, int client, int iteration, int dimNb);
 
     }
 }
