@@ -1,5 +1,5 @@
-using DataLayerTS;
-using DataLayerTS.Models;
+using Clapsode.DataLayerTS;
+using Clapsode.DataLayerTS.Models;
 using Serilog;
 using System;
 using System.Linq;
@@ -23,7 +23,7 @@ namespace BenchmarkTool.Database
     public class DatalayertsDBasVect : IDatabase
     {
 
-        private static ReusableClient _client = new ReusableClient(Config.GetDatalayertsConnection(), Config.GetDatalayertsUser(), Config.GetDatalayertsPassword());
+        private static ReusableClient _client = new ReusableClient(Config.GetDatalayertsConnection(), Config.GetDatalayertsUser(), Config.GetDatalayertsPassword()){UseCompression=false, IngestionBatchSize=256};
 
         public IQuery<ContainerRequest> _iquery;
 
@@ -317,9 +317,9 @@ namespace BenchmarkTool.Database
 
                 DltsQuery.Selection.Add(dir, series);
 
-                DltsQuery.Transformations[0].Function = FunctionType.FILTER;
-                DltsQuery.Transformations[0].Min = query.MaxValue;
-                DltsQuery.Transformations[0].Max = query.MinValue;
+                DltsQuery.Transformations.First().Function = FunctionType.FILTER;
+                DltsQuery.Transformations.First().Min = query.MaxValue;
+                DltsQuery.Transformations.First().Max = query.MinValue;
 
                 Stopwatch sw = Stopwatch.StartNew();
                 var points = 0;

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using DataLayerTS;
-using DataLayerTS.Models;
+using Clapsode.DataLayerTS.Models;
 
 using BenchmarkTool.Queries;
 
@@ -13,25 +13,25 @@ namespace BenchmarkTool.Database.Queries
 
         public ContainerRequest RangeRaw => new ContainerRequest()
         {
-            Selection = new Dictionary<string, string[]>(),
+            Selection = new Dictionary<string, IEnumerable<string>>(),
         };
                 public ContainerRequest RangeRawAllDims => new ContainerRequest()
         {
-            Selection = new Dictionary<string, string[]>(),
+            Selection = new Dictionary<string, IEnumerable<string>>(),
         };
 
                 public ContainerRequest RangeRawLimited => new ContainerRequest()
         {
-            Selection = new Dictionary<string, string[]>(),
+            Selection = new Dictionary<string,  IEnumerable<string>>(),
         };
                 public ContainerRequest RangeRawAllDimsLimited => new ContainerRequest()
         {
-            Selection = new Dictionary<string, string[]>(),
+            Selection = new Dictionary<string,  IEnumerable<string>>(),
         };
 
         public ContainerRequest RangeAgg => new ContainerRequest()
         {
-            Selection = new Dictionary<string, string[]>(),
+            Selection = new Dictionary<string,  IEnumerable<string>>(),
             Transformations = new TransformationRequest[] {
                 new TransformationRequest(){
                     Function = FunctionType.RESAMPLE,
@@ -43,7 +43,7 @@ namespace BenchmarkTool.Database.Queries
 
         public ContainerRequest OutOfRange => new ContainerRequest()
         {
-            Selection = new Dictionary<string, string[]>(),
+            Selection = new Dictionary<string,  IEnumerable<string>>(),
             Transformations = new TransformationRequest[] {
                 new TransformationRequest(){
                     Function = FunctionType.FILTER, },
@@ -53,7 +53,7 @@ namespace BenchmarkTool.Database.Queries
 
         public ContainerRequest StdDev => new ContainerRequest()
         {
-            Selection = new Dictionary<string, string[]>(),
+            Selection = new Dictionary<string,  IEnumerable<string>>(),
             Transformations = new TransformationRequest[] {
                 new TransformationRequest(){
                     Function = FunctionType.RESAMPLE,
@@ -64,7 +64,7 @@ namespace BenchmarkTool.Database.Queries
 
         public ContainerRequest AggDifference => new ContainerRequest()
         {
-            Selection = new Dictionary<string, string[]>(),
+            Selection = new Dictionary<string,  IEnumerable<string>>(),
             Transformations = new TransformationRequest[] {
                 new TransformationRequest(){
                     Function = FunctionType.RESAMPLE, 

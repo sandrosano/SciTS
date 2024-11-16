@@ -6,9 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Clapsode.DataLayerTS.Client" Version="2.1.17" />
     <PackageReference Include="FluentFTP" Version="51.1.0" />
     <PackageReference Include="ClickHouse.Client" Version="6.8.1" />
-    <PackageReference Include="DataLayerTS.Client" Version="2.1.9" />
+    <!-- <PackageReference Include="DataLayerTS.Client" Version="2.1.9" /> -->
     <PackageReference Include="ClickHouse.Ado" Version="2.0.2.2" />
     <PackageReference Include="InfluxDB.Client" Version="4.14.0" />
     <PackageReference Include="MessagePack" Version="2.5.187" />
