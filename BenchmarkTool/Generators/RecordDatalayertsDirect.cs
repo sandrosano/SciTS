@@ -1,6 +1,6 @@
 using System;
 using System.Collections;
-using DataLayerTS.Models;
+using Clapsode.DataLayerTS.Models;
 
 namespace BenchmarkTool.Generators
 {

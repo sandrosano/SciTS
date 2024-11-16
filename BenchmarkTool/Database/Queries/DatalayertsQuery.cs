@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using DataLayerTS;
+using Clapsode.DataLayerTS;
 using Clapsode.DataLayerTS.Models;
 
 using BenchmarkTool.Queries;
