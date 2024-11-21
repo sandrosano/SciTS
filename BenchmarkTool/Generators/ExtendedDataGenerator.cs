@@ -91,7 +91,7 @@ namespace BenchmarkTool.Generators
         }
 
 
-        public Batch GenerateBatch(int batchSize, List<int> sensorIdsForThisClientList, DateTime date, int dimensions, RecordDatalayertsDirect overloadmarker) // DATALAYERTSDIRECT // date is here relative to the number of batches which have been written before and the Testretries
+        public Batch GenerateBatch(int batchSize, List<int> sensorIdsForThisClientList, DateTime date, int dimensions, bool is_Vector_based_Batch) // DATALAYERTSDIRECT // date is here relative to the number of batches which have been written before and the Testretries
         {
 
 
@@ -103,7 +103,7 @@ namespace BenchmarkTool.Generators
                 _rnd = new Random(7839);
                 var _Timestamp = date;
 
-                Batch batch = new Batch(dimensions* sensorIdsForThisClientList.Count);
+                Batch batch = new Batch(batchSize,dimensions, sensorIdsForThisClientList.Count);
 
 
                 int vectorSize = batchSize / sensorIdsForThisClientList.Count;

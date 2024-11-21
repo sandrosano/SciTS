@@ -71,21 +71,21 @@ namespace BenchmarkTool.Database
 
     
 
-                var name = "test-row-"+BenchmarkTool.Program.Mode.ToString()+"-Dim" +
+                var name = "./scits/row/test-row-"+BenchmarkTool.Program.Mode.ToString()+"-Dim" +
                 Config._actualDataDimensionsNr.ToString()+"-bs"+
                 batch.Size.ToString()+  "time"
                 
                 
                  + batch.RecordsArray.First().Time.ToFileTimeUtc() + "-plus-" + 
-                ((int) (  batch.RecordsArray.Last().Time.ToFileTimeUtc() - batch.RecordsArray.First().Time.ToFileTimeUtc() ) ).ToString()
+                ((int) (  batch.RecordsArray.Last().Time.ToFileTimeUtc() - batch.RecordsArray.First().Time.ToFileTimeUtc() ) /10000 ).ToString()
                 
-                 + "-S-"+batch.RecordsArray.First().SensorID.ToString() + "-"+batch.RecordsArray.Last().SensorID.ToString()  + ".json";
+                 + "ms-S-"+batch.RecordsArray.First().SensorID.ToString() + "-"+batch.RecordsArray.Last().SensorID.ToString()  + ".json";
 
                 await client.AutoConnect();
                 Stopwatch sw = new Stopwatch();
 
                 sw.Start();
-                await client.UploadBytes(bytes, name);
+                await client.UploadBytes(bytes, name,   FtpRemoteExists.Overwrite,    true);
                 sw.Stop();
 
 

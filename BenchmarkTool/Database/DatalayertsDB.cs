@@ -22,7 +22,7 @@ namespace BenchmarkTool.Database
     public class DatalayertsDB : IDatabase
     {
 
-        private static ReusableClient _client = new ReusableClient(Config.GetDatalayertsConnection(), Config.GetDatalayertsUser(), Config.GetDatalayertsPassword());
+        private static ReusableClient _client = new ReusableClient(Config.GetDatalayertsConnection(), Config.GetDatalayertsUser(), Config.GetDatalayertsPassword()){UseCompression=false,IngestionBatchSize=256 };
 
         public IQuery<ContainerRequest> _iquery;
 

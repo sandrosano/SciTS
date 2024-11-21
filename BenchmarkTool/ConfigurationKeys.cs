@@ -6,6 +6,8 @@ namespace BenchmarkTool
 {
     static class ConfigurationKeys
     {
+      public const string GetConsecutiveTimeBatchesIterations = "ConsecutiveTimeBatchesIterations";
+      public const string PatchWorkMode = "PatchWorkMode";
         public const string MixedWLPercentageOptions = "MixedWLPercentageOptions";
          public const string GlancesStorageFileSystem = "GlancesStorageFileSystem";
         public const string PrintModeEnabled = "PrintModeEnabled";

@@ -69,7 +69,7 @@ namespace BenchmarkTool
 
             if (_targetDb.GetType().ToString().Contains("asVect"))
             {
-                batch = dataGenerator.GenerateBatch(_BatchSize, sensorIdsForThisClientList, batchStartdate, _DimNb, new RecordDatalayertsDirect(1, DateTime.Now, new double[] { 1 }));
+                batch = dataGenerator.GenerateBatch(_BatchSize, sensorIdsForThisClientList, batchStartdate, _DimNb, true);
 
             }
             else

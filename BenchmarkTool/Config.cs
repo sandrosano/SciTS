@@ -2,11 +2,23 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using System.Security.Cryptography;
 
 namespace BenchmarkTool
 {
     public class Config
     {
+        public static int ConsecutiveTimeBatchesIterations;
+        public static int GetConsecutiveTimeBatchesIterations()
+        {
+            var val = ConfigurationManager.AppSettings[ConfigurationKeys.GetConsecutiveTimeBatchesIterations];
+
+            if (String.IsNullOrEmpty(val))
+                throw new Exception(String.Format("Null or empty app settings val for key={0}", ConfigurationKeys.GetConsecutiveTimeBatchesIterations));
+
+            int.TryParse(val, out int it); // -1 means: Patchwork Mode
+            return it;
+        }
         public static string GetGlancesStorageFileSystem()
         {
             var val = ConfigurationManager.AppSettings[ConfigurationKeys.GlancesStorageFileSystem];
@@ -19,6 +31,19 @@ namespace BenchmarkTool
             var val = ConfigurationManager.AppSettings[ConfigurationKeys.PrintModeEnabled];
             if (String.IsNullOrEmpty(val))
                 throw new Exception(String.Format("Null or empty app settings val for key={0}", ConfigurationKeys.PrintModeEnabled));
+            bool.TryParse(val, out bool print);
+            return print;
+        }
+        public static string _PatchWorkArg = "null";
+
+        public static bool GetPatchWorkMode()
+        {
+            var val = ConfigurationManager.AppSettings[ConfigurationKeys.PatchWorkMode];
+
+            if (String.IsNullOrEmpty(val))
+                throw new Exception(String.Format("Null or empty app settings val for key={0}", ConfigurationKeys.PatchWorkMode));
+            if (Config._PatchWorkArg.Contains("patch"))
+                val = "true";
             bool.TryParse(val, out bool print);
             return print;
         }
@@ -150,7 +175,7 @@ namespace BenchmarkTool
                 throw new Exception(String.Format("Null or empty app settings val for key={0}", ConfigurationKeys.FTPPassword));
             return val;
         }
-   
+
 
         public static int GetRegularTsScaleMilliseconds()
         {
@@ -290,18 +315,23 @@ namespace BenchmarkTool
             var val = ConfigurationManager.AppSettings[ConfigurationKeys.QueryType];
             if (String.IsNullOrEmpty(QueryTypeOnRunTime)) //INIT
             {
-                if (val == "All"){ //Optional TODO move logic to Config.GetQueryOptions,INSERT FILTERS SPACES
+                if (val == "All")
+                { //Optional TODO move logic to Config.GetQueryOptions,INSERT FILTERS SPACES
                     Config._QueryArray = new string[] { "RangeQueryRawData", "RangeQueryRawAllDimsData", "RangeQueryAggData", "OutOfRangeQuery", "DifferenceAggQuery", "STDDevQuery" };
-                }else if (val == "Agg" || Program.Mode.Contains("Agg")){
+                }
+                else if (val == "Agg" || Program.Mode.Contains("Agg"))
+                {
                     Config._QueryArray = new string[] { "RangeQueryAggData", "DifferenceAggQuery", "STDDevQuery" };
-                }else
-                {   
+                }
+                else
+                {
                     List<string> valA = val.Split(',').ToList();
-                    foreach( var x in valA){
-                      x.ToEnum<Operation>();
-                    } 
+                    foreach (var x in valA)
+                    {
+                        x.ToEnum<Operation>();
+                    }
                     //Optional TODO insert check method assert correct parsing
-                    
+
                     Config._QueryArray = valA.ToArray();
                 }
 
@@ -318,14 +348,29 @@ namespace BenchmarkTool
         {
             _ingType = ingType;
         }
+
         public static string GetIngestionType()
         {
             var val = ConfigurationManager.AppSettings[ConfigurationKeys.IngestionType];
-            if (_ingType.Contains("regular") ||   _ingType.Contains("irregular"))
+            if (_ingType.Contains("regular") || _ingType.Contains("irregular"))
                 val = _ingType;
             if (String.IsNullOrEmpty(val) || (val != "regular" && val != "irregular"))
                 throw new Exception(String.Format("Invalid or Null or empty app settings val for key={0}", ConfigurationKeys.IngestionType));
             return val;
+        }
+        public static bool GetIsRegular()
+        {
+            var val = GetIngestionType(); bool isR;
+            if (val == "regular")
+            {
+                isR = true;
+            }
+            else
+            {
+                isR = true;
+            }
+
+            return isR;
         }
         public static string GetMultiDimensionStorageType()
         {
@@ -354,7 +399,8 @@ namespace BenchmarkTool
         }
 
         public static int[] GetSensorsFilter()
-        {  int[] aa;
+        {
+            int[] aa;
             var val = ConfigurationManager.AppSettings[ConfigurationKeys.SensorsFilter];
             if (String.IsNullOrEmpty(val))
             {
@@ -497,5 +543,7 @@ namespace BenchmarkTool
                 throw new Exception(String.Format("Null or empty app settings val for key={0}", ConfigurationKeys.MixedWLPercentageOptions));
             return Array.ConvertAll(val.Split(","), s => int.TryParse(s, out var x) ? x : -1); ;
         }
+
+
     }
 }

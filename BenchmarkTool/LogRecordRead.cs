@@ -23,10 +23,11 @@ namespace BenchmarkTool
         public int Aggregation { get; }
 
         public int Dimensions { get; }
+        public bool Regularity {get;}
 
         public LogRecordRead(double latency, double clientlatency, double succeededPoints, long epoch, long iterationTimestamp, int sensNb,
                             double failedPoints, Operation operation, string mode,int percentage, int client, int clientsNb,
-                            DateTime startDate, long duration, int aggregation, int iteration, int dimNb)
+                            DateTime startDate, long duration, int aggregation, int iteration, int dimNb, bool regularity)
         {
             IterationTimestamp= iterationTimestamp;
             SensorsNumber = sensNb;
@@ -47,6 +48,7 @@ namespace BenchmarkTool
             Duration = duration;
             Aggregation = aggregation;
             Iteration = iteration;
+            Regularity=regularity;
 
         }
     }

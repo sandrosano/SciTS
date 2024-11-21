@@ -56,37 +56,7 @@ namespace BenchmarkTool.Database
                 if (Config.GetIngestionType() == "irregular")
                 {
 
-                    pointContainer = new List<TimeSeriesPoint<double>>();
-
-                    foreach (var record in batch.RecordsArray)
-                    {
-                        var dirName = GetDirectoryName();
-                        for (var dim = 0; dim < record.ValuesArray.Length; dim++)
-                        {
-                            timeSeriesPoint = new TimeSeriesPoint<double>()
-                            {
-                                Directory = dirName,
-                                Series = "sensor_id_" + record.SensorID + $"_{Constants.Value}_" + dim, // GetSeriesNames(record.SensorID, dim),
-                                Value = record.ValuesArray[dim],
-                                Timestamp = new DateTime(record.Time.Year,
-                                record.Time.Month,
-                                record.Time.Day,
-                                record.Time.Hour,
-                                record.Time.Minute,
-                                record.Time.Second, // .Millisecond  unavalible for DLTS-> crashes for this kind of low interval
-                                DateTimeKind.Utc)
-
-                            };
-                            pointContainer = pointContainer.Append<TimeSeriesPoint<double>>(timeSeriesPoint);
-                        }
-                    }
-
-                    Stopwatch sw1 = Stopwatch.StartNew();
-                    await _client.IngestPointsAsync<double>(pointContainer, OverwriteMode.older, 10000 * Config.GetRegularTsScaleMilliseconds(), TimeSeriesCreationTimestampStorageType.NONE, default).ConfigureAwait(false);
-
-                    sw1.Stop();
-
-                    return new QueryStatusWrite(true, new PerformanceMetricWrite(sw1.Elapsed.TotalMicroseconds, batch.Size, 0, Operation.BatchIngestion));
+                   throw new NotImplementedException("Use DatalayertsDB (not asVect Class)");
 
                 }
                 else //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
