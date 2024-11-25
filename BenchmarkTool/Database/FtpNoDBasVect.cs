@@ -80,7 +80,7 @@ namespace BenchmarkTool.Database
 
 
 
-                    var name = "./scits/vec/test-vector-" + BenchmarkTool.Program.Mode.ToString() + "-" +
+                    var name = "./scits/vec/"+Config._actualDataDimensionsNr+"D/test-vector-" + BenchmarkTool.Program.Mode.ToString() + "-" +
                     Config._actualDataDimensionsNr.ToString() + "-bs" +
                     batch.Size.ToString() + "time"
 
@@ -95,7 +95,7 @@ namespace BenchmarkTool.Database
                     await client.UploadBytes(bytes, name,   FtpRemoteExists.Overwrite,    true);
                     sw.Stop();
 
-                    return new QueryStatusWrite(true, new PerformanceMetricWrite(sw.Elapsed.TotalMicroseconds, batch.Size, 0, Operation.BatchIngestion));
+                    return new QueryStatusWrite(true, new PerformanceMetricWrite(sw.Elapsed.TotalMicroseconds, bytes.Length / 8 * Config._actualDataDimensionsNr , 0, Operation.BatchIngestion)); // divided by 8 so that in the analysis the bytes show up correctly as MB, as all the other databastes measure batchsize in double float (64bit,8By) therefore the analysis multiplies  with 8, and then with the amount of values per Datapoint
                 }
                 catch (Exception ex)
                 {

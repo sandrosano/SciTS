@@ -25,7 +25,7 @@ namespace BenchmarkTool.Database
 
         public async void Init()
         {
-             client = new AsyncFtpClient(Config.GetFTPConnection(), Config.GetFTPUser(), Config.GetFTPPassword());
+            client = new AsyncFtpClient(Config.GetFTPConnection(), Config.GetFTPUser(), Config.GetFTPPassword());
 
             
         }
@@ -71,7 +71,7 @@ namespace BenchmarkTool.Database
 
     
 
-                var name = "./scits/row/test-row-"+BenchmarkTool.Program.Mode.ToString()+"-Dim" +
+                var name = "./scits/row/"+Config._actualDataDimensionsNr+"D/test-row-"+BenchmarkTool.Program.Mode.ToString()+"-Dim" +
                 Config._actualDataDimensionsNr.ToString()+"-bs"+
                 batch.Size.ToString()+  "time"
                 
@@ -89,7 +89,7 @@ namespace BenchmarkTool.Database
                 sw.Stop();
 
 
-                return new QueryStatusWrite(true, new PerformanceMetricWrite(sw.Elapsed.TotalMicroseconds, batch.Size, 0, Operation.BatchIngestion));
+                return new QueryStatusWrite(true, new PerformanceMetricWrite(sw.Elapsed.TotalMicroseconds, bytes.Length / 8 * Config._actualDataDimensionsNr , 0, Operation.BatchIngestion)); // divided by 8 so that in the analysis the bytes show up correctly as MB, as all the other databastes measure batchsize in double float (64bit,8By) therefore the analysis multiplies  with 8, and then with the amount of values per Datapoint
             }
             catch (Exception ex)
             {
