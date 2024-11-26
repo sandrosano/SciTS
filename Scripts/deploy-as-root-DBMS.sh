@@ -56,25 +56,75 @@ export INFLUXD_HTTP_BIND_ADDRESS=127.0.0.1:8086
 
 
 ##ClickHouse
-sudo apt-get install -y apt-transport-https ca-certificates curl gnupg
-curl -fsSL 'https://packages.clickhouse.com/rpm/lts/repodata/repomd.xml.key' | sudo gpg --dearmor -o /usr/share/keyrings/clickhouse-keyring.gpg
+  apt-get install -y apt-transport-https ca-certificates curl gnupg
+curl -fsSL 'https://packages.clickhouse.com/rpm/lts/repodata/repomd.xml.key' |   gpg --dearmor -o /usr/share/keyrings/clickhouse-keyring.gpg
 
-echo "deb [signed-by=/usr/share/keyrings/clickhouse-keyring.gpg] https://packages.clickhouse.com/deb stable main" | sudo tee \
+echo "deb [signed-by=/usr/share/keyrings/clickhouse-keyring.gpg] https://packages.clickhouse.com/deb stable main" |   tee \
     /etc/apt/sources.list.d/clickhouse.list
-sudo apt-get update
-sudo apt-get install -y clickhouse-server clickhouse-client
+  apt-get update
+  apt-get install -y clickhouse-server clickhouse-client
 #  set password: ClickhousePWscits
-sudo service clickhouse-server start
+echo " <listen_host>::</listen_host> " >> /etc/clickhouse-server/config.xml
+  service clickhouse-server start
 
 ## Timescale
 
-sudo apt install gnupg postgresql-common apt-transport-https lsb-release wget
-sudo /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh
+  apt install gnupg postgresql-common apt-transport-https lsb-release wget
+  sh  /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh
 curl -s https://packagecloud.io/install/repositories/timescale/timescaledb/script.deb.sh | bash
-sudo apt update
-sudo apt install timescaledb-2-postgresql-17  postgresql-client-17  
-sudo systemctl restart postgresql
-sudo -u postgres psql
+  apt update
+  apt install timescaledb-2-postgresql-17  postgresql-client-17  
+psql -U postgres
+# set pw: TimescalePWscitskit  :
+\password
+#  hier alle "peer" auf "md5" :
+vim  /etc/postgresql/17/main/pg_hba.conf 
+apt install pgbouncer
+# overwrite following with: 
+# [databases]
+# * = port=5432 auth_user=postgres[pgbouncer]
+# logfile = pgbouncer.log
+# pidfile = pgbouncer.pid
+# listen_addr = 0.0.0.0
+# listen_port = 6432
+# auth_type = hba
+# auth_hba_file = /etc/postgresql/17/main/pg_hba.conf 
+# admin_users = postgres
+# stats_users = postgres
+# pool_mode = session
+# ignore_startup_parameters = extra_float_digits
+# max_client_conn = 200
+# default_pool_size = 50
+# reserve_pool_size = 25
+# reserve_pool_timeout = 3
+# server_lifetime = 300
+# server_idle_timeout = 120
+# server_connect_timeout = 5
+# server_login_retry = 1
+# query_timeout = 60
+# query_wait_timeout = 60
+# client_idle_timeout = 60
+# client_login_timeout = 60
+ 
+
+  vim /etc/pgbouncer/pgbouncer.ini
+  chown postgres:postgres /etc/pgbouncer/ -R
+# overwrite content in pgbouncer.service with: 
+# [Unit]
+# Description=A lightweight connection pooler for PostgreSQL
+# Documentation=man:pgbouncer(1)
+# After=syslog.target network.target[Service]
+# RemainAfterExit=yesUser=postgres
+# Group=postgres# Path to the init file
+# Environment=BOUNCERCONF=/etc/pgbouncer/pgbouncer.iniExecStart=/usr/bin/pgbouncer -q ${BOUNCERCONF}
+# ExecReload=/usr/bin/pgbouncer -R -q ${BOUNCERCONF}# Give a reasonable amount of time for the server to start up/shut down
+# TimeoutSec=300[Install]
+# WantedBy=multi-user.target
+vim /usr/lib/systemd/system/pgbouncer.service
+ 
+service pgbouncer start
+  systemctl restart postgresql
+psql -U postgres -p 6432
 
 
 
@@ -108,8 +158,10 @@ cp -pvr /var/lib/postgresql/ /store/
 vim /etc/postgresql/17/main/postgresql.conf 
 vim /etc/influxdb/config.toml 
 vim /etc/clickhouse-server/config.xml 
-
-
+# change args to : -w --disable-webui
+vim /lib/systemd/system/glances.service
+systemctl daemon-reload
+service glances start
 
 ## exechute machine Benchmarks 
 ### Disk
@@ -127,7 +179,6 @@ vim /etc/clickhouse-server/config.xml
 iperf -c 10.0.0.7 # , on clientside, with "iperf -s" running  on serverside
 # prepare for test, after scaled machine
 sudo timescaledb-tune --quiet --yes --dry-run >> /path/to/postgresql.conf
-glances -w --disable-webui &
 service influxdb stop
 service clickhouse-server stop
 service postgres stop

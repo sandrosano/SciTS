@@ -195,7 +195,7 @@ namespace BenchmarkTool
 
 
         private async static Task CustomizableBenchMarkRun(bool write, bool read)
-        {
+        {try{
             var init = Config.GetQueryType(); // Just for Init the Array
 
             _TestRetryIteration = 0;
@@ -356,6 +356,10 @@ namespace BenchmarkTool
 
             }
 
+        }catch (Exception e)
+                {
+                    Log.Error(e.ToString());
+                }
 
         }
 
