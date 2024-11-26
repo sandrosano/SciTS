@@ -1,0 +1,1 @@
+sudo docker run     --detach        --env FTP_USER=ftpscits    --env FTP_PASS=FtpPWscitskit       --name my-ftp-server    --publish 20-21:20-21/tcp       --publish 40000-40099:40000-40099/tcp   --volume /sdFTP:/home/scits       garethflowers/ftp-server  

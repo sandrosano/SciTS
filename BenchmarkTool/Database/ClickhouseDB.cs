@@ -63,8 +63,10 @@ namespace BenchmarkTool.Database
                     Port = Config.GetClickhousePort(),
                     Database = Config.GetClickhouseDatabase(),
                     User = Config.GetClickhouseUser(),
+                    Password = Config.GetClickhousePassword(),
                     SocketTimeout = 15000,
                     Async = true,
+                    
                 };
 
                 _write_connection = new ClickHouse.Ado.ClickHouseConnection(write_settings);

@@ -1,5 +1,155 @@
+# RUN 2024 - Init
+
+## on client 
+apt install -y wget curl gpg sudo htop vim  git glances net-tools fio sysbench   iperf 
+snap install dotnet-sdk --classic --channel 8.0/stable
+git clone https://github.com/sandrosano/SciTS.git
+
+
+## on server
+
+sudo su # From now on everything as root - and: yes, sudo is unneccessary after this line
+apt update -y
+apt install -y tzdata
+apt upgrade -y
+apt install -y wget curl gpg sudo htop vim pip git glances net-tools fio sysbench glances iperf
+
+
+## Format disk
+mkfs.xfs -f /dev/nvme0n2
+mkdir /store
+mount -t xfs /dev/nvme0n2 /store
+mkdir /store/CH /store/TS /store/IF /store/FTP
+
+
+# Configure DBMS
+## Influx
+curl --silent --location -O \
+https://repos.influxdata.com/influxdata-archive.key
+echo "943666881a1b8d9b849b74caebf02d3465d6beb716510d86a39f6c8e8dac7515  influxdata-archive.key" \
+| sha256sum --check - && cat influxdata-archive.key \
+| gpg --dearmor \
+| tee /etc/apt/trusted.gpg.d/influxdata-archive.gpg > /dev/null \
+&& echo 'deb [signed-by=/etc/apt/trusted.gpg.d/influxdata-archive.gpg] https://repos.influxdata.com/debian stable main' \
+| tee /etc/apt/sources.list.d/influxdata.list
+apt-get update && apt-get install influxdb2
+service influxdb start
+
+influx setup -n scitsconfig\
+  --org scits \
+  --bucket scitsdb \
+  --username scits \
+  --password InfluxPW \
+  --host http://127.0.0.1:8086 \
+  --token u7Ek4P5s0Nle61QQF1nNA3ywL1JYZky6rHRXxkPBX5bY4H3YFJ6T4KApWSRhaKNj_kHgx70ZLBowB6Di4t2YXg== \
+ --force  
+
+influx config create --active \
+  -n scitsconfigclient \
+  -u http://127.0.0.1:8086 \
+  -t u7Ek4P5s0Nle61QQF1nNA3ywL1JYZky6rHRXxkPBX5bY4H3YFJ6T4KApWSRhaKNj_kHgx70ZLBowB6Di4t2YXg== \
+  -o scits     
+
+export INFLUXD_HTTP_BIND_ADDRESS=127.0.0.1:8086
+
+# curl http://127.0.0.1:8086 | cat 
+
+
+##ClickHouse
+sudo apt-get install -y apt-transport-https ca-certificates curl gnupg
+curl -fsSL 'https://packages.clickhouse.com/rpm/lts/repodata/repomd.xml.key' | sudo gpg --dearmor -o /usr/share/keyrings/clickhouse-keyring.gpg
+
+echo "deb [signed-by=/usr/share/keyrings/clickhouse-keyring.gpg] https://packages.clickhouse.com/deb stable main" | sudo tee \
+    /etc/apt/sources.list.d/clickhouse.list
+sudo apt-get update
+sudo apt-get install -y clickhouse-server clickhouse-client
+#  set password: ClickhousePWscits
+sudo service clickhouse-server start
+
+## Timescale
+
+sudo apt install gnupg postgresql-common apt-transport-https lsb-release wget
+sudo /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh
+curl -s https://packagecloud.io/install/repositories/timescale/timescaledb/script.deb.sh | bash
+sudo apt update
+sudo apt install timescaledb-2-postgresql-17  postgresql-client-17  
+sudo systemctl restart postgresql
+sudo -u postgres psql
+
+
+
+##FTP
+# Add Docker's official GPG key:
+sudo apt-get update
+sudo apt-get install ca-certificates curl
+sudo install -m 0755 -d /etc/apt/keyrings
+sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+sudo chmod a+r /etc/apt/keyrings/docker.asc
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo apt-get update
+sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+mkdir /store/FTP
+sudo docker run     --detach        --env FTP_USER=ftpscits    --env FTP_PASS=FtpPWscitskit       --name my-ftp-server    --publish 20-21:20-21/tcp       --publish 40000-40999:40000-40999/tcp   --volume /store/FTP:/home/scits       garethflowers/ftp-server  
+# change port config
+docker exec -it my-ftp-server sh
+# replace  with : pasv_max_port=40099 
+vi /etc/vsftpd/vsftpd.conf
+
+
+
+# Config data dir on Drive
+cp -pvr /var/lib/clickhouse/ /store/
+cp -pvr /var/lib/influxdb/ /store/
+cp -pvr /var/lib/postgresql/ /store/
+# change dir from /var/lib/... to /store/...
+vim /etc/postgresql/17/main/postgresql.conf 
+vim /etc/influxdb/config.toml 
+vim /etc/clickhouse-server/config.xml 
+
+
+
+## exechute machine Benchmarks 
+### Disk
+#### Write IOPS
+#### Write Throughput
+#### Read IOPS
+#### Read Throughput
+### CPU
+#### Single Thread
+#### MultiThread on Max Amount of Cores
+### Memory
+#### Single Thread
+#### MultiThread on Max Amounts of Cores
+### Network
+iperf -c 10.0.0.7 # , on clientside, with "iperf -s" running  on serverside
+# prepare for test, after scaled machine
+sudo timescaledb-tune --quiet --yes --dry-run >> /path/to/postgresql.conf
+glances -w --disable-webui &
+service influxdb stop
+service clickhouse-server stop
+service postgres stop
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # sudo apt update
-# sudo apt install -y fio
+# sudo apt install -y fio  apt-transport-https ca-certificates dirmngr
 # TEST_DIR=/mnt/disks/mnt_dir/fiotest
 # sudo mkdir -p $TEST_DIR
 # mount TEST DIR to DOCKER
@@ -10,10 +160,7 @@
 # set postgres conf: https://hassanannajjar.medium.com/how-to-fix-error-password-authentication-failed-for-the-user-in-postgresql-896e1fd880dc
 
 ## NOT WORKING IN ROOT
-apt update -y
-apt install -y tzdata
-apt upgrade -y
-apt install -y wget curl gpg sudo htop vim pip git glances dotnet7 net-tools fio sysbench glances apt-transport-https ca-certificates dirmngr  
+  
 # cd home
 
 mkdir /mnt/vdb1/
@@ -34,7 +181,7 @@ wget https://dl.influxdata.com/influxdb/releases/influxdb2-client-2.7.3-linux-am
 tar xvzf influxdb2-client-2.7.3-linux-amd64.tar.gz
 cp ./influx /usr/local/bin/
 
- curl -O https://dl.influxdata.com/influxdb/releases/influxdb2_2.7.4-1_amd64.deb
+curl -O https://dl.influxdata.com/influxdb/releases/influxdb2_2.7.4-1_amd64.deb
 sudo dpkg -i influxdb2_2.7.4-1_amd64.deb
 
 # influxd > IF.log  2>&1 &  
@@ -167,7 +314,7 @@ tar -x victoria-metrics-darwin-amd64-v1.94.0.tar.gz
 victoria-metrics-prod  -retentionPeriod=9y > VM.log 2>&1 &
 
  # pip install --user 'glances[all]'
-glances -w --disable-webui &
+
 #  MODUIFY SERIVICE FILE!!!
  
 git clone https://github.com/sandrosano/SciTS

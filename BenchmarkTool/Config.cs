@@ -288,6 +288,14 @@ namespace BenchmarkTool
             return val;
         }
 
+
+        public static string GetClickhousePassword()
+        {
+            var val = ConfigurationManager.AppSettings[ConfigurationKeys.ClickhousePassword];
+            if (String.IsNullOrEmpty(val))
+                throw new Exception(String.Format("Null or empty app settings val for key={0}", ConfigurationKeys.ClickhousePassword));
+            return val;
+        }
         public static int GetClickhousePort()
         {
             var val = ConfigurationManager.AppSettings[ConfigurationKeys.ClickhousePort];

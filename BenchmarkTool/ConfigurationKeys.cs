@@ -40,6 +40,8 @@ namespace BenchmarkTool
         public const string ClickhouseHost = "ClickhouseHost";
         public const string ClickhousePort = "ClickhousePort";
         public const string ClickhouseUser = "ClickhouseUser";
+                public const string ClickhousePassword = "ClickhousePassword";
+
         public const string ClickhouseDatabase = "ClickhouseDatabase";
         public const string VictoriametricsDBHost = "VictoriametricsDBHost";
         public const string VictoriametricsDBToken = "VictoriametricsDBToken";
