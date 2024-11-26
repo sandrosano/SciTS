@@ -10,13 +10,14 @@ namespace BenchmarkTool.System
 {
     public class GlancesMonitor
     {
-         private IRestClient _client;
+         private static IRestClient _client = new RestClient( new RestClientOptions( Config.GetGlancesUrl()) , configureSerialization: s => s.UseNewtonsoftJson()  );
+            
             //  , new ConfigureSerialization(    s => s.UseSerializer(() =>  new UseNewtonsoftJson()    ) )   )  ;  // nwetonsoftJson? TODO
             //         //   .UseNewtonsoftJson();
 
         public GlancesMonitor(string baseUrl)
         {
-             _client = new RestClient( new RestClientOptions( Config.GetGlancesUrl()) , configureSerialization: s => s.UseNewtonsoftJson()  );
+            //  _client = new RestClient( new RestClientOptions( Config.GetGlancesUrl()) , configureSerialization: s => s.UseNewtonsoftJson()  );
             
             // Habe "new RestClient" als statische Var Dek
         }
