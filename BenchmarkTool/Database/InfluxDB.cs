@@ -55,7 +55,7 @@ namespace BenchmarkTool.Database
             {
                 Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
 
-                var t = new TimeSpan(0, 0, 10, 0);
+                var t = new TimeSpan(0, 0, 180, 0);
                 _options = new InfluxDBClientOptions.Builder()
                     .Url(Config.GetInfluxHost())
                     .AuthenticateToken(Config.GetInfluxToken().ToCharArray())
