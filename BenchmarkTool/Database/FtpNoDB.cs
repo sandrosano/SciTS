@@ -26,8 +26,8 @@ namespace BenchmarkTool.Database
         public async void Init()
         {
             client = new AsyncFtpClient(Config.GetFTPConnection(), Config.GetFTPUser(), Config.GetFTPPassword());
-
-            
+            client.Config.ConnectTimeout = 100000;
+            client.Config.DataConnectionConnectTimeout = 100000;
         }
         public void CheckOrCreateTable()
         {
@@ -71,7 +71,7 @@ namespace BenchmarkTool.Database
 
     
 
-                var name = "./scits/row/"+Config._actualDataDimensionsNr+"D/test-row-"+BenchmarkTool.Program.Mode.ToString()+"-Dim" +
+                var name = "./scits/"+BenchmarkTool.Program.Mode+"/row/"+Config._actualDataDimensionsNr+"D/test-row-"+BenchmarkTool.Program.Mode.ToString()+"-Dim" +
                 Config._actualDataDimensionsNr.ToString()+"-bs"+
                 batch.Size.ToString()+  "time"
                 

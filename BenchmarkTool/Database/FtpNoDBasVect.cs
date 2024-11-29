@@ -27,6 +27,9 @@ namespace BenchmarkTool.Database
         {
 
             client = new AsyncFtpClient(Config.GetFTPConnection(), Config.GetFTPUser(), Config.GetFTPPassword());
+            client.Config.ConnectTimeout = 100000;
+            client.Config.DataConnectionConnectTimeout = 100000;
+
 
 
 
@@ -80,22 +83,22 @@ namespace BenchmarkTool.Database
 
 
 
-                    var name = "./scits/vec/"+Config._actualDataDimensionsNr+"D/test-vector-" + BenchmarkTool.Program.Mode.ToString() + "-" +
+                    var name = "./scits/"+BenchmarkTool.Program.Mode+"/vec/" + Config._actualDataDimensionsNr + "D/test-vector-" + BenchmarkTool.Program.Mode.ToString() + "-" +
                     Config._actualDataDimensionsNr.ToString() + "-bs" +
                     batch.Size.ToString() + "time"
 
                      + batch.RecordsArray.First().Time.ToFileTimeUtc() + "-plus-" +
-                    (batch.RecordsArray.First().ValuesArray.Length * Config.GetRegularTsScaleMilliseconds() ).ToString()
+                    (batch.RecordsArray.First().ValuesArray.Length * Config.GetRegularTsScaleMilliseconds()).ToString()
                     + "ms-S-" + batch.RecordsArray.First().SensorID.ToString() + "-" + batch.RecordsArray.Last().SensorID.ToString() + ".json";
 
                     await client.AutoConnect();
                     Stopwatch sw = new Stopwatch();
 
                     sw.Start();
-                    await client.UploadBytes(bytes, name,   FtpRemoteExists.Overwrite,    true);
+                    await client.UploadBytes(bytes, name, FtpRemoteExists.Overwrite, true);
                     sw.Stop();
 
-                    return new QueryStatusWrite(true, new PerformanceMetricWrite(sw.Elapsed.TotalMicroseconds, bytes.Length / 8 * Config._actualDataDimensionsNr , 0, Operation.BatchIngestion)); // divided by 8 so that in the analysis the bytes show up correctly as MB, as all the other databastes measure batchsize in double float (64bit,8By) therefore the analysis multiplies  with 8, and then with the amount of values per Datapoint
+                    return new QueryStatusWrite(true, new PerformanceMetricWrite(sw.Elapsed.TotalMicroseconds, bytes.Length / 8 * Config._actualDataDimensionsNr, 0, Operation.BatchIngestion)); // divided by 8 so that in the analysis the bytes show up correctly as MB, as all the other databastes measure batchsize in double float (64bit,8By) therefore the analysis multiplies  with 8, and then with the amount of values per Datapoint
                 }
                 catch (Exception ex)
                 {

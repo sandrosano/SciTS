@@ -10,6 +10,16 @@ dotnet run --project SciTS/BenchmarkTool write regular DummyDB patch 2>&1 | tee 
 dotnet run --project SciTS/BenchmarkTool write irregular DummyDB patch 2>&1 | tee RrDummypatch.log &&
 
 
+
+# FtpNoDB
+##  one full day of data as row-based Json:    
+dotnet run --project SciTS/BenchmarkTool populate irregular FtpNoDB 2>&1 | tee IRpopFTP.log && 
+## one full day of data as vector-based Json:    
+dotnet run --project SciTS/BenchmarkTool populate regular FtpNoDBasVect 2>&1 | tee RpopFtpNoDBasVect.log 
+## benchmark writing speeds
+dotnet run --project SciTS/BenchmarkTool write regular ClickhouseDB patch 2>&1 | tee R-CH-PW.log && dotnet run --project SciTS/BenchmarkTool write irregular ClickhouseDB patch 2>&1 | tee IR-CH-PW.log
+
+
 # Clickhouse
 ## First populate all the DBS with at least one full day of data:    
 dotnet run --project SciTS/BenchmarkTool populate regular ClickhouseDB 2>&1 | tee RpopCH.log && 
