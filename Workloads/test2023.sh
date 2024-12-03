@@ -13,11 +13,12 @@ dotnet run --project SciTS/BenchmarkTool write irregular DummyDB patch 2>&1 | te
 
 # FtpNoDB
 ##  one full day of data as row-based Json:    
-dotnet run --project SciTS/BenchmarkTool populate irregular FtpNoDB 2>&1 | tee IRpopFTP.log && 
+dotnet run --project SciTS/BenchmarkTool populate regular FtpNoDB 2>&1 | tee RpopFTP.log && 
 ## one full day of data as vector-based Json:    
-dotnet run --project SciTS/BenchmarkTool populate regular FtpNoDBasVect 2>&1 | tee RpopFtpNoDBasVect.log 
-## benchmark writing speeds
-dotnet run --project SciTS/BenchmarkTool write regular ClickhouseDB patch 2>&1 | tee R-CH-PW.log && dotnet run --project SciTS/BenchmarkTool write irregular ClickhouseDB patch 2>&1 | tee IR-CH-PW.log
+dotnet run --project SciTS/BenchmarkTool populate regular FtpNoDBasVect 2>&1 | tee RpopFtpNoDBasVect.log &&
+## benchmark writing speeds -- !! You can set ConsecutiveBatches to a very low number as it is not a DB.
+dotnet run --project SciTS/BenchmarkTool write regular FtpNoDB 2>&1 | tee R-FTP.log && 
+dotnet run --project SciTS/BenchmarkTool write regular FtpNoDBasVect 2>&1 | tee R-FtpNoDB.log
 
 
 # Clickhouse
@@ -71,5 +72,26 @@ dotnet run --project SciTS/BenchmarkTool write regular TimescaleDB patch 2>&1 | 
 dotnet run --project SciTS/BenchmarkTool write irregular TimescaleDB patch 2>&1 | tee IR-TS-PW.log &&
 dotnet run --project SciTS/BenchmarkTool mixed-AggQueries regular TimescaleDB 2>&1 | tee  Rmixed-AggQueriesTS.log &&
 dotnet run --project SciTS/BenchmarkTool mixed-LimitedQueries regular TimescaleDB 2>&1 | tee  Rmixed-LimitedQueriesTS.log && touch finallyfinishedIF
+
+
+
+# DatalayertsDB - as DatalayertsDBasVect
+## First populate all the DBS with at least one full day of data:    
+dotnet run --project SciTS/BenchmarkTool populate regular DatalayertsDBasVect 2>&1 | tee RpopDLTS-V.log && 
+dotnet run --project SciTS/BenchmarkTool populate irregular DatalayertsDB 2>&1 | tee IRpopDLTS.log  
+
+## Then, go into the server, login to the database via client or GUI and read out all table size metrics, save to file.
+du -h /data | tee DLTS-FS.info
+
+## Now the  I/O benchmark
+dotnet run --project SciTS/BenchmarkTool consecutive regular DatalayertsDBasVect 2>&1 | tee R-DLTS-V.log && 
+dotnet run --project SciTS/BenchmarkTool write regular DatalayertsDBasVect patch 2>&1 | tee R-DLTS-V-PW.log && 
+dotnet run --project SciTS/BenchmarkTool mixed-AggQueries regular DatalayertsDBasVect 2>&1 | tee  Rmixed-AggQueriesDLTS-V.log &&
+dotnet run --project SciTS/BenchmarkTool mixed-LimitedQueries regular DatalayertsDBasVect 2>&1 | tee  Rmixed-LimitedQueriesDLTS-V.log && cp ./App.config.IRDLTS SciTS/BenchmarkTool/App.config &&
+dotnet run --project SciTS/BenchmarkTool write irregular DatalayertsDB 2>&1 | tee IR-DLTS.log && 
+dotnet run --project SciTS/BenchmarkTool write irregular DatalayertsDB patch 2>&1 | tee IR-DLTS-PW.log &&  
+dotnet run --project SciTS/BenchmarkTool populate irregular DatalayertsDB 2>&1 | tee IRpopDLTS.log  &&
+touch finallyfinishedDLTS
+
 
 

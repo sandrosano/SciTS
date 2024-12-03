@@ -71,7 +71,7 @@ namespace BenchmarkTool.Database
                             while (c < actualDim) { builder.Append(", " + Constants.Value + "_" + c + " double precision"); c++; }
 
                             NpgsqlCommand m_createtbl_cmd = new NpgsqlCommand(
-                              String.Format("CREATE EXTENSION IF NOT EXISTS timescaledb;CREATE TABLE IF NOT EXISTS " + tableName + " ( time timestamp(6) with time zone NOT NULL, sensor_id integer " + builder + ") ; SELECT create_hypertable('" + tableName + "', by_range('time', 3600000000), if_not_exists => TRUE);    CREATE INDEX ON " + tableName + " ( sensor_id, time DESC); --UNIQUE;  ")
+                              String.Format("CREATE EXTENSION IF NOT EXISTS timescaledb;CREATE TABLE IF NOT EXISTS " + tableName + " ( time timestamp(6) with time zone NOT NULL, sensor_id integer " + builder + ") ; SELECT create_hypertable('" + tableName + "', by_range('time', 3600000000), if_not_exists => TRUE);    CREATE INDEX ON " + tableName + " ( sensor_id, time DESC); --UNIQUE; ALTER TABLE "+tableName+"  SET (timescaledb.compress,timescaledb.compress_segmentby='sensor_id',    timescaledb.compress_orderby='time');SELECT add_compression_policy('"+tableName+"', INTERVAL '1 hour'); ")
                                , _connection);
 
                             m_createtbl_cmd.ExecuteNonQuery();
@@ -105,6 +105,7 @@ namespace BenchmarkTool.Database
             {
                 _connection = new NpgsqlConnection(_connectionConfig);
                 _connection.Open();
+
 
                 if (Config.GetMultiDimensionStorageType() == "column")
                 {

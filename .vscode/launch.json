@@ -29,7 +29,7 @@
             "preLaunchTask": "build",
             "program": "${workspaceFolder}/BenchmarkTool/bin/Debug/net7.0/BenchmarkTool.dll",
             "args": [
-                "write", "regular", "FtpNoDB", "patch"  // can be populate, populate+1,short-populate+6, read, write,   mixed-AggQueries ,mixed-LimitedQueries, mixed (execs sequentially the prior two in a row) mixed-11%LimitedQueries , consecutive on first place , regular /irregular as second argument - and X_DB on third. e.g. "write", "regular" , "PostgresDB" -- and "patch"  on fourth to toggle PatchWork Mode instead of Consecutive Batch Mode
+                "write", "regular", "DummyDB", ""  // can be populate, populate+1,short-populate+6, read, write,   mixed-AggQueries ,mixed-LimitedQueries, mixed (execs sequentially the prior two in a row) mixed-11%LimitedQueries , consecutive on first place , regular /irregular as second argument - and X_DB on third. e.g. "write", "regular" , "PostgresDB" -- and "patch"  on fourth to toggle PatchWork Mode instead of Consecutive Batch Mode
             ],
             "cwd": "${workspaceFolder}",
             "console": "internalConsole",

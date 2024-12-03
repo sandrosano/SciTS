@@ -1,0 +1,2 @@
+- Transform Glances-Metrics in Continuous Request, which continues retrieving data during waiting for writing response, based on a Glances-Resolution, and then: either aggregates, or safes all values, or both- configurable via Config.
+- Actor-approach: Client Triggers his following Client, so  that no Idle exists on Client side

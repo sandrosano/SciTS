@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Globalization;
+using System.Text;
+using System.IO;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Serilog;
@@ -21,6 +24,12 @@ namespace BenchmarkTool
         public static int _TestRetryIteration { get; private set; }
         public static int _currentlimit { get; private set; }
 
+
+        static string GetNextTSPath()
+        {
+            string path = @"./.lastdate." + Config.GetPolyDimTableName() + ".scits";
+            return path;
+        }
         static async Task Main(string[] args)
         {
             try
@@ -153,6 +162,7 @@ namespace BenchmarkTool
 
             int totalClientsNb = Config.GetClientNumberOptions().Last();
             int batchSize = Config.GetSensorNumber() * 60 * (1000 / Config.GetRegularTsScaleMilliseconds()) / totalClientsNb; // one minute ingestion
+            DateTime currentbatchdate = Config.GetStartTime();
             foreach (var dimNb in Config.GetDataDimensionsNrOptions())
             {
                 int minute = 0;
@@ -164,7 +174,8 @@ namespace BenchmarkTool
                     var clientArray = new ClientWrite[totalClientsNb];
                     for (var chosenClientIndex = 1; chosenClientIndex <= totalClientsNb; chosenClientIndex++)
                     {
-                        clientArray[chosenClientIndex - 1] = new ClientWrite(iterationTimestamp, chosenClientIndex, totalClientsNb, Config.GetSensorNumber(), batchSize, dimNb, Config.GetStartTime().AddDays(dayAfterStartdate).AddMinutes(minute));
+                        currentbatchdate = Config.GetStartTime().AddDays(dayAfterStartdate).AddMinutes(minute);
+                        clientArray[chosenClientIndex - 1] = new ClientWrite(iterationTimestamp, chosenClientIndex, totalClientsNb, Config.GetSensorNumber(), batchSize, dimNb, currentbatchdate);
                     }
                     minute++;
 
@@ -182,6 +193,19 @@ namespace BenchmarkTool
                                 result.Client, result.Iteration, dimNb, minute, false, Config.GetIsRegular());
                             csvLoggerW.WriteRecord(recordW);
                         }
+
+                    var nextdate = currentbatchdate.AddMinutes(1);
+                    if (!File.Exists(GetNextTSPath()))
+                    {
+
+                        using (FileStream fs = File.Create(GetNextTSPath()))
+                        {
+                            string dataasstring = nextdate.ToString("yyyy-MM-dd HH:mm:ss.fff",
+                                                                CultureInfo.InvariantCulture); //your data
+                            byte[] info = new UTF8Encoding(true).GetBytes(dataasstring);
+                            fs.Write(info, 0, info.Length);
+                        }
+                    }
                     GC.Collect();
                 }
             }
@@ -199,10 +223,10 @@ namespace BenchmarkTool
             try
             {
                 var init = Config.GetQueryType(); // Just for Init the Array
-
-
+                var date = Config.GetStartTime();
+                DateTime nextdate;
+                DateTime patchMeandate = Config.GetStartTime(); ;
                 int[] clientNumberArray = Config.GetClientNumberOptions();
-
                 int[] percentageArray = Config.GetMixedWLPercentageOptions();
                 int[] batchSizeArray = Config.GetBatchSizeOptions();
                 int[] dimNbArray = Config.GetDataDimensionsNrOptions();
@@ -252,7 +276,7 @@ namespace BenchmarkTool
                     Config._QueryArray = new string[] { "RangeQueryRawAllDimsLimitedData" };
 
                 _TestRetryIteration = 0;
- 
+
                 while (_TestRetryIteration < Config.GetTestRetries())
                 {
                     _TestRetryIteration++;
@@ -260,9 +284,6 @@ namespace BenchmarkTool
                     foreach (var percentage in percentageArray)
                     {
                         Config._actualMixedWLPercentage = percentage;
-
-
-
                         int clientloop = 0;
                         foreach (var totalClientsNb in clientNumberArray)
                         {
@@ -273,59 +294,60 @@ namespace BenchmarkTool
                             foreach (var dimNb in dimNbArray)
                             {
                                 Config._actualDataDimensionsNr = dimNb;
-
-
-
-
-
-
-
                                 int batchloop = 0;
                                 foreach (var batchSize in batchSizeArray)
                                 {
-
-
-
                                     for (int ConsecutiveTimeBatchesIterations = 0; ConsecutiveTimeBatchesIterations <= getConsecutiveTimeBatchesIterations; ConsecutiveTimeBatchesIterations++)
                                     {
-
-
-
-
-
-
                                         long iterationTimestamp = Helper.GetNanoEpoch();
                                         _currentWriteBatchSize = batchSize;
                                         _currentlimit = (int)((double)_currentWriteBatchSize * ((double)Config._actualMixedWLPercentage / 100));
-                                        var date = Config.GetStartTime(); bool patchwork = false;
-
+                                        bool patchwork = false;
 
                                         if (write == true)
                                         {
                                             if (Config.GetPatchWorkMode() == true) // PatchWork Mode
                                             {
                                                 patchwork = true;
+
+                                                if (File.Exists(GetNextTSPath()))
+                                                {
+                                                    string readText = File.ReadAllText(GetNextTSPath());
+                                                    patchMeandate = DateTime.Parse(readText);
+                                                }
+
+                                                nextdate = patchMeandate.AddMilliseconds(((batchSize / (sensorsNb / _currentClientsNR)) + 1) * Config.GetRegularTsScaleMilliseconds());
+
+                                                using (FileStream fs = File.Create(GetNextTSPath()))
+                                                {
+                                                    string dataasstring = nextdate.ToString("yyyy-MM-dd HH:mm:ss.fff",
+                                                                                        CultureInfo.InvariantCulture);
+                                                    byte[] info = new UTF8Encoding(true).GetBytes(dataasstring);
+                                                    fs.Write(info, 0, info.Length);
+                                                }
+
                                                 Random r = new Random();
-                                                double rr = r.Next(2, 60 * 60 * 23);
-                                                date = Config.GetStartTime().AddDays(1 + (batchloop + clientloop * Config.GetBatchSizeOptions().Length) * daySpan).AddMilliseconds(Config.GetRegularTsScaleMilliseconds() * rr);
-
-
+                                                double rr = r.Next(1, Config.GetRegularTsScaleMilliseconds() * daySpan * 60 * 60 * 24);
+                                                date = patchMeandate.AddMilliseconds(Config.GetRegularTsScaleMilliseconds() * rr);
                                             }
                                             else
                                             {
-                                                date = Config.GetStartTime().AddMonths(-12).AddDays(1 + (batchloop + clientloop * Config.GetBatchSizeOptions().Length) * daySpan).AddMilliseconds(Config.GetRegularTsScaleMilliseconds() * (batchSize / Config.GetSensorNumber()) * (ConsecutiveTimeBatchesIterations + ((_TestRetryIteration - 1) * (Config.GetConsecutiveTimeBatchesIterations() + 1))));
+                                                if (File.Exists(GetNextTSPath()))
+                                                {
+                                                    string readText = File.ReadAllText(GetNextTSPath());
+                                                    date = DateTime.Parse(readText);
+                                                }
+                                                nextdate = date.AddMilliseconds(((batchSize / (sensorsNb / _currentClientsNR))) * Config.GetRegularTsScaleMilliseconds());
 
-                                            } // both date= prevent overwrites, each config has its day, same here for mixedWLrun:
-                                            if (write == true & read == true)
-                                            {
+                                                using (FileStream fs = File.Create(GetNextTSPath()))
+                                                {
+                                                    string dataasstring = nextdate.ToString("yyyy-MM-dd HH:mm:ss.fff",
+                                                                                        CultureInfo.InvariantCulture);
+                                                    byte[] info = new UTF8Encoding(true).GetBytes(dataasstring);
+                                                    fs.Write(info, 0, info.Length);
+                                                }
 
-                                                if (Mode.Contains("Agg"))
-                                                { date = date.AddMonths(1); }
-                                                else
-                                                { date = date.AddMonths(2 + 1 * MXpercentageloop); }
                                             }
-
-
                                             var clientArrayW = new ClientWrite[_currentWriteClientsNR];
                                             for (var chosenClientIndex = 1; chosenClientIndex <= _currentWriteClientsNR; chosenClientIndex++)
                                             {
@@ -350,8 +372,6 @@ namespace BenchmarkTool
 
                                         if (read == true)
                                         {
-
-
                                             foreach (string Query in Config._QueryArray)
                                             {
                                                 Config.QueryTypeOnRunTime = Query;
