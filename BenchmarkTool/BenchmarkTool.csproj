@@ -7,7 +7,7 @@
 
   <ItemGroup>
     <PackageReference Include="Clapsode.DataLayerTS.Client" Version="2.1.17" />
-    <PackageReference Include="FluentFTP" Version="51.1.0" />
+    <PackageReference Include="FluentFTP" Version="52.0.0" />
     <PackageReference Include="ClickHouse.Client" Version="7.9.1" />
     <!-- <PackageReference Include="DataLayerTS.Client" Version="2.1.9" /> -->
     <PackageReference Include="ClickHouse.Ado" Version="2.0.5" />

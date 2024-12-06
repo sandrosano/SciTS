@@ -36,7 +36,9 @@ namespace BenchmarkTool.Database.Queries
                 new TransformationRequest(){
                     Function = FunctionType.RESAMPLE,
                     Aggregations = new AggregationType[] { AggregationType.MEAN },
-                    IntervalTicks = Config.GetAggregationInterval()* 36000000000 ,
+                    IntervalTicks = Config.GetAggregationInterval()* 36000000000 , 
+                    Mapping =  AggregationMappingType.EXPAND,
+
                     },
                   }
         };
@@ -57,7 +59,8 @@ namespace BenchmarkTool.Database.Queries
             Transformations = new TransformationRequest[] {
                 new TransformationRequest(){
                     Function = FunctionType.RESAMPLE,
-                    Aggregations = new AggregationType[] { AggregationType.STD },
+                    Aggregations = new AggregationType[] { AggregationType.STD }, 
+                    Mapping =  AggregationMappingType.EXPAND,
                     }
                 },
         };
@@ -70,6 +73,7 @@ namespace BenchmarkTool.Database.Queries
                     Function = FunctionType.RESAMPLE, 
                     Aggregations = new AggregationType[] { AggregationType.DIF },
                     IntervalTicks = Config.GetAggregationInterval()* 36000000000 ,
+                    Mapping =  AggregationMappingType.EXPAND,
 
                     }
                 },

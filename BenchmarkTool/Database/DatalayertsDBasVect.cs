@@ -56,7 +56,7 @@ namespace BenchmarkTool.Database
                 if (Config.GetIngestionType() == "irregular")
                 {
 
-                   throw new NotImplementedException("Use DatalayertsDB (not asVect Class)");
+                   throw new NotImplementedException("Use DatalayertsDB (not ..asVect Class)");
 
                 }
                 else //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -100,6 +100,25 @@ namespace BenchmarkTool.Database
                 }
 
 
+
+// {{{
+
+//          var bytes = JsonSerializer.SerializeToUtf8Bytes(vectorContainer);
+
+    
+
+//                 var name = "./test.json";
+//     using (FileStream fs = File.Create(name))
+//                                                 {
+                                           
+//                                                     byte[] info = bytes; // new UTF8Encoding(true).GetBytes(vectorContainer);
+//                                                     fs.Write(info, 0, info.Length);
+//                                                 }
+
+// }}}
+
+
+
                 Stopwatch sw2 = Stopwatch.StartNew();
                 await _client.IngestVectorsAsync<double>(vectorContainer, OverwriteMode.older, TimeSeriesCreationTimestampStorageType.NONE, default).ConfigureAwait(false);
                 sw2.Stop();
@@ -138,8 +157,7 @@ namespace BenchmarkTool.Database
                 Stopwatch sw = Stopwatch.StartNew();
                 var readResult = await _client.RetrieveVectorsAsync<double>(DltsQuery, true, true).ConfigureAwait(false);
                 var points = 0;
-                points = readResult.Vectors.Length;
-                _aggInterval = 0;
+    points = readResult.Vectors.Length * readResult.Vectors.First().Values.Length;                _aggInterval = 0;
                 sw.Stop();
                 // await Print(readResult, query.ToString(), Config.GetPrintModeEnabled());
 
@@ -171,14 +189,13 @@ namespace BenchmarkTool.Database
 
                 _aggInterval = 0;
                 sw.Stop();
-                points = readResult.Vectors.Length * readResult.Vectors.First().Values.Length;
-                // await Print(readResult, query.ToString(), Config.GetPrintModeEnabled());
+    points = readResult.Vectors.Length * readResult.Vectors.First().Values.Length;                // await Print(readResult, query.ToString(), Config.GetPrintModeEnabled());
 
                 return new QueryStatusRead(true, points, new PerformanceMetricRead(sw.Elapsed.TotalMicroseconds, points, 0, query.StartDate, query.DurationMinutes, _aggInterval, Operation.RangeQueryRawAllDimsData));
             }
             catch (Exception ex)
             {
-                Log.Error(String.Format("Failed to execute Range Query Raw Data. Exception: {0}", ex.ToString()));
+                Log.Error(String.Format("Failed to execute Range Query Raw alld Data. Exception: {0}", ex.ToString()));
                 return new QueryStatusRead(false, 0, new PerformanceMetricRead(0, 0, 0, query.StartDate, query.DurationMinutes, _aggInterval, Operation.RangeQueryRawAllDimsData), ex, ex.ToString());
             }
         }
@@ -200,8 +217,7 @@ namespace BenchmarkTool.Database
                 Stopwatch sw = Stopwatch.StartNew();
                 var readResult = await _client.RetrieveVectorsAsync<double>(DltsQuery, true, true).ConfigureAwait(false);
                 var points = 0;
-                points = readResult.Vectors.Length;
-                _aggInterval = 0;
+    points = readResult.Vectors.Length * readResult.Vectors.First().Values.Length;                _aggInterval = 0;
                 sw.Stop();
                 // await Print(readResult, query.ToString(), Config.GetPrintModeEnabled());
 
@@ -209,7 +225,7 @@ namespace BenchmarkTool.Database
             }
             catch (Exception ex)
             {
-                Log.Error(String.Format("Failed to execute Range Query Raw Data. Exception: {0}", ex.ToString()));
+                Log.Error(String.Format("Failed to execute Range Query Raw lim Data. Exception: {0}", ex.ToString()));
                 return new QueryStatusRead(false, 0, new PerformanceMetricRead(0, 0, 0, query.StartDate, query.DurationMinutes, _aggInterval, Operation.RangeQueryRawData), ex, ex.ToString());
             }
         }
@@ -230,8 +246,7 @@ namespace BenchmarkTool.Database
                 Stopwatch sw = Stopwatch.StartNew();
                 var readResult = await _client.RetrieveVectorsAsync<double>(DltsQuery, true, true).ConfigureAwait(false);
                 var points = 0;
-                points = readResult.Vectors.Length;
-                _aggInterval = 0;
+    points = readResult.Vectors.Length * readResult.Vectors.First().Values.Length;                _aggInterval = 0;
                 sw.Stop();
                 // await Print(readResult, query.ToString(), Config.GetPrintModeEnabled());
 
@@ -239,7 +254,7 @@ namespace BenchmarkTool.Database
             }
             catch (Exception ex)
             {
-                Log.Error(String.Format("Failed to execute Range Query Raw Data. Exception: {0}", ex.ToString()));
+                Log.Error(String.Format("Failed to execute Range Query AllD lim Data. Exception: {0}", ex.ToString()));
                 return new QueryStatusRead(false, 0, new PerformanceMetricRead(0, 0, 0, query.StartDate, query.DurationMinutes, _aggInterval, Operation.RangeQueryRawAllDimsData), ex, ex.ToString());
             }
         }
@@ -254,21 +269,41 @@ namespace BenchmarkTool.Database
                 DltsQuery.LastTimestamp = DateTime.SpecifyKind(query.EndDate, DateTimeKind.Utc);
 
                 string dir = GetDirectoryName();
-                string[] series = GetSeriesNames(query.SensorIDs);
+                string[] series = GetSeriesNames(query.SensorIDs.ToArray(),new int[1]{ 0});
                 DltsQuery.Selection.Add(dir, series);
 
                 Stopwatch sw = Stopwatch.StartNew();
+
+
+{{{
+
+         var bytes = JsonSerializer.SerializeToUtf8Bytes(DltsQuery);
+
+    
+
+                var name = "./test.json";
+    using (FileStream fs = File.Create(name))
+                                                {
+                                           
+                                                    byte[] info = bytes; // new UTF8Encoding(true).GetBytes(vectorContainer);
+                                                    fs.Write(info, 0, info.Length);
+                                                }
+
+}}}
+
+
+
                 var readResult = await _client.RetrieveVectorsAsync<double>(DltsQuery, true).ConfigureAwait(false);
                 var points = 0;
-                points = readResult.Vectors.Length;
+                points = readResult.Vectors.Length * readResult.Vectors.First().Values.Length;
                 _aggInterval = (int)Config.GetAggregationInterval();
                 sw.Stop();
                 // await Print(readResult, query.ToString(), Config.GetPrintModeEnabled());
                 return new QueryStatusRead(true, points, new PerformanceMetricRead(sw.Elapsed.TotalMicroseconds, points, 0, query.StartDate, query.DurationMinutes, _aggInterval, Operation.RangeQueryAggData));
             }
             catch (Exception ex)
-            {
-                Log.Error(String.Format("Failed to execute Range Query Raw Data. Exception: {0}", ex.ToString()));
+            { 
+                Log.Error(String.Format("Failed to execute AGG Query    . Exception: {0}", ex.ToString()));
                 return new QueryStatusRead(false, 0, new PerformanceMetricRead(0, 0, 0, query.StartDate, query.DurationMinutes, _aggInterval, Operation.RangeQueryAggData), ex, ex.ToString());
             }
         }
@@ -295,8 +330,7 @@ namespace BenchmarkTool.Database
                 var points = 0;
                 var readResult = await _client.RetrievePointsAsync<double>(DltsQuery, false, false, default).ConfigureAwait(false);
 
-                points = readResult.Count(); //TODO assert correcness
-
+    points = readResult.Count();
                 _aggInterval = 0;
                 sw.Stop();
 
@@ -306,7 +340,7 @@ namespace BenchmarkTool.Database
             }
             catch (Exception ex)
             {
-                Log.Error(String.Format("Failed to execute Range Query Raw Data. Exception: {0}", ex.ToString()));
+                Log.Error(String.Format("Failed to execute OORange Query  Data. Exception: {0}", ex.ToString()));
                 return new QueryStatusRead(false, 0, new PerformanceMetricRead(0, 0, 0, query.StartDate, query.DurationMinutes, _aggInterval, Operation.OutOfRangeQuery), ex, ex.ToString());
             }
         }
@@ -321,21 +355,20 @@ namespace BenchmarkTool.Database
                 DltsQuery.LastTimestamp = DateTime.SpecifyKind(query.EndDate, DateTimeKind.Utc);
 
                 string dir = GetDirectoryName();
-                string[] series = new string[] { GetSeriesNames(query.FirstSensorID)[0], GetSeriesNames(query.SecondSensorID)[0] };
+                string[] series = new string[] { GetSeriesNames(new int[1]{query.FirstSensorID}, new int[1]{0})[0], GetSeriesNames(new int[1]{query.SecondSensorID}, new int[1]{0})[0] };
                 DltsQuery.Selection.Add(dir, series);
 
                 Stopwatch sw = Stopwatch.StartNew();
                 var readResult = await _client.RetrieveVectorsAsync<double>(DltsQuery, true).ConfigureAwait(false);
                 var points = 0;
-                points = readResult.Vectors.Length;
-                _aggInterval = (int)Config.GetAggregationInterval();
+    points = readResult.Vectors.Length * readResult.Vectors.First().Values.Length;                _aggInterval = (int)Config.GetAggregationInterval();
                 sw.Stop();
                 // await Print(readResult, query.ToString(), Config.GetPrintModeEnabled());
                 return new QueryStatusRead(true, points, new PerformanceMetricRead(sw.Elapsed.TotalMicroseconds, points, 0, query.StartDate, query.DurationMinutes, _aggInterval, Operation.DifferenceAggQuery));
             }
             catch (Exception ex)
             {
-                Log.Error(String.Format("Failed to execute Range Query Raw Data. Exception: {0}", ex.ToString()));
+                Log.Error(String.Format("Failed to execute Agg DiFF Query    . Exception: {0}", ex.ToString()));
                 return new QueryStatusRead(false, 0, new PerformanceMetricRead(0, 0, 0, query.StartDate, query.DurationMinutes, _aggInterval, Operation.DifferenceAggQuery), ex, ex.ToString());
             }
         }
@@ -356,8 +389,7 @@ namespace BenchmarkTool.Database
                 Stopwatch sw = Stopwatch.StartNew();
                 var readResult = await _client.RetrieveVectorsAsync<double>(DltsQuery, true, default).ConfigureAwait(false);
                 var points = 0;
-                points = readResult.Vectors.Length;
-                _aggInterval = (int)Config.GetAggregationInterval();
+    points = readResult.Vectors.Length * readResult.Vectors.First().Values.Length;                _aggInterval = (int)Config.GetAggregationInterval();
                 sw.Stop();
                 // await Print(readResult, query.ToString(), Config.GetPrintModeEnabled());
 

@@ -73,13 +73,7 @@ namespace BenchmarkTool.Database
 
                 var name = "./scits/"+BenchmarkTool.Program.Mode+"/row/"+Config._actualDataDimensionsNr+"D/test-row-"+BenchmarkTool.Program.Mode.ToString()+"-Dim" +
                 Config._actualDataDimensionsNr.ToString()+"-bs"+
-                batch.Size.ToString()+  "time"
-                
-                
-                 + batch.RecordsArray.First().Time.ToFileTimeUtc() + "-plus-" + 
-                ((int) (  batch.RecordsArray.Last().Time.ToFileTimeUtc() - batch.RecordsArray.First().Time.ToFileTimeUtc() ) /10000 ).ToString()
-                
-                 + "ms-S-"+batch.RecordsArray.First().SensorID.ToString() + "-"+batch.RecordsArray.Last().SensorID.ToString()  + ".json";
+                batch.Size.ToString()+  "time" + batch.RecordsArray.First().Time.ToFileTimeUtc() + "-plus-" + ((int) (  batch.RecordsArray.Last().Time.ToFileTimeUtc() - batch.RecordsArray.First().Time.ToFileTimeUtc() ) /10000 ).ToString() + "ms-S-"+batch.RecordsArray.First().SensorID.ToString() + "-"+batch.RecordsArray.Last().SensorID.ToString()  + ".json";
 
                 await client.AutoConnect();
                 Stopwatch sw = new Stopwatch();

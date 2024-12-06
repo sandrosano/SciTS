@@ -41,6 +41,9 @@ namespace BenchmarkTool
                 _DimNb = dimNb;
                 _targetDb.CheckOrCreateTable();
 
+                if(batchSize/(sensorNumber/totalClientsNumber)<1)
+                   throw new InvalidOperationException("There must be at least 1 TS per sensor in batch. Remember: SensorNbrs get divided on parralel clients.");
+
             }
             catch (Exception ex)
             {

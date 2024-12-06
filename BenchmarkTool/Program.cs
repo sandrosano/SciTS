@@ -27,7 +27,7 @@ namespace BenchmarkTool
 
         static string GetNextTSPath()
         {
-            string path = @"./.lastdate." + Config.GetPolyDimTableName() + ".scits";
+            string path = @"./.lastdate." +Config.GetTargetDatabase()+"."+ Config.GetPolyDimTableName() + ".scits";
             return path;
         }
         static async Task Main(string[] args)
@@ -252,13 +252,13 @@ namespace BenchmarkTool
                         {
                             dimNbArray = new int[2] { Config.GetDataDimensionsNrOptions().First(), Config.GetDataDimensionsNrOptions().Last() };
                         } // prevents mixed WL from taking too long
-                        if (batchSizeArray.Length > 3)
+                        if (batchSizeArray.Length > 4)
                         {
-                            batchSizeArray = new int[3] { batchSizeArray.First(), batchSizeArray[batchSizeArray.Length / 2], batchSizeArray.Last() };
+                            batchSizeArray = new int[4] { batchSizeArray.First(),batchSizeArray[1], batchSizeArray[batchSizeArray.Length / 2], batchSizeArray.Last() };//small batches are more interesting
                         }
-                        if (clientNumberArray.Length > 3)
+                        if (clientNumberArray.Length > 4)
                         {
-                            clientNumberArray = new int[3] { clientNumberArray.First(), clientNumberArray[clientNumberArray.Length / 2], clientNumberArray.Last() };
+                            clientNumberArray = new int[4] { clientNumberArray.First(), clientNumberArray[clientNumberArray.Length / 2],clientNumberArray[clientNumberArray.Length-1], clientNumberArray.Last() }; //high clients are more intereesting
                         }
 
                     }
@@ -391,7 +391,7 @@ namespace BenchmarkTool
                                                 {
                                                     foreach (var result in resultsR)
                                                     {
-                                                        var recordR = result.PerformanceMetric.ToLogRecord(Mode, percentage, result.Timestamp, result.IterationTimestamp, result.StartDate, batchSize, _currentReadClientsNR, sensorsNb,
+                                                        var recordR = result.PerformanceMetric.ToLogRecord(Mode, percentage, result.Timestamp, iterationTimestamp, result.StartDate, batchSize, _currentReadClientsNR, sensorsNb,
                                                         result.Client, result.Iteration, dimNb, Config.GetIsRegular());
                                                         csvLoggerR.WriteRecord(recordR);
                                                     }

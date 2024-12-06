@@ -110,7 +110,7 @@ namespace BenchmarkTool
         public static string GetTargetDatabase()
         {
             var val = ConfigurationManager.AppSettings[ConfigurationKeys.TargetDatabase];
-            if (_DbSetting.Contains("DB"))
+            if (_DbSetting.Contains("DB")) // could be better check TODO
             {
                 val = _DbSetting;
             }
