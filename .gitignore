@@ -392,6 +392,7 @@ FodyWeavers.xsd
 */.ipynb_checkpoints/*
 
 # This Project
+*.scits
 *.csv
 BenchmarkTool/Jupyter/graphs/*
 BenchmarkTool/App.config
