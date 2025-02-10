@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.Intrinsics.X86;
 using System.Threading.Tasks.Dataflow;
 using InfluxDB.Client.Api.Domain;
 using InfluxDB.Client.Core.Internal;
@@ -103,12 +104,13 @@ namespace BenchmarkTool.Generators
                 _rnd = new Random(7839);
                 var _Timestamp = date;
 
-                Batch batch = new Batch(batchSize,dimensions, sensorIdsForThisClientList.Count);
+
+                Batch batch = new Batch(batchSize, dimensions, sensorIdsForThisClientList.Count);
+                var offset = 0;
+                if (BenchmarkTool.Program.Mode.Contains("pop")) { offset = -2; } // -1 becouse it prevents that if Clients nivide sensrnumbers unevenly, and vectors are longer, no NULL is beeing created  between batches
 
 
-                int vectorSize = batchSize / sensorIdsForThisClientList.Count;
-
-
+                int vectorSize = batchSize / (sensorIdsForThisClientList.Count + offset);
 
 
 
@@ -117,7 +119,7 @@ namespace BenchmarkTool.Generators
                 {
                     foreach (var chosenSensor in sensorIdsForThisClientList)
                     {
-                        for(var chosenDim = 0; chosenDim< dimensions; chosenDim++)
+                        for (var chosenDim = 0; chosenDim < dimensions; chosenDim++)
                         {
 
 

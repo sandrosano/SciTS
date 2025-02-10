@@ -63,7 +63,7 @@ namespace BenchmarkTool.Database
                 {
 
                     var firsttime = batch.RecordsArray.First().Time;
-                    DateTime roundedDate = new DateTime(firsttime.Year, firsttime.Month, firsttime.Day, firsttime.Hour, firsttime.Minute, firsttime.Second, firsttime.Millisecond, DateTimeKind.Utc);
+                    DateTime roundedDate = new DateTime(firsttime.Year, firsttime.Month, firsttime.Day, firsttime.Hour, firsttime.Minute, firsttime.Second, DateTimeKind.Utc);
                     int dataDims = Config.GetDataDimensionsNr();
                     int anzahlTimestepsPerDimSensor = batch.RecordsArray.First().ValuesArray.Length;
                     
@@ -183,12 +183,32 @@ namespace BenchmarkTool.Database
                 string[] series = GetSeriesNames(query.SensorIDs);
                 DltsQuery.Selection.Add(dir, series);
 
+
+
+{{{
+
+         var bytes = JsonSerializer.SerializeToUtf8Bytes(DltsQuery);
+
+    
+
+                var name = "./test.json";
+    using (FileStream fs = File.Create(name))
+                                                {
+                                           
+                                                    byte[] info = bytes; // new UTF8Encoding(true).GetBytes(vectorContainer);
+                                                    fs.Write(info, 0, info.Length);
+                                                }
+
+}}}
                 Stopwatch sw = Stopwatch.StartNew();
                 var readResult = await _client.RetrieveVectorsAsync<double>(DltsQuery, true, true).ConfigureAwait(false);
                 var points = 0;
 
                 _aggInterval = 0;
                 sw.Stop();
+
+ 
+
     points = readResult.Vectors.Length * readResult.Vectors.First().Values.Length;                // await Print(readResult, query.ToString(), Config.GetPrintModeEnabled());
 
                 return new QueryStatusRead(true, points, new PerformanceMetricRead(sw.Elapsed.TotalMicroseconds, points, 0, query.StartDate, query.DurationMinutes, _aggInterval, Operation.RangeQueryRawAllDimsData));

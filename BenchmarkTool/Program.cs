@@ -316,7 +316,7 @@ namespace BenchmarkTool
                                                     patchMeandate = DateTime.Parse(readText);
                                                 }
 
-                                                nextdate = patchMeandate.AddMilliseconds(((batchSize / (sensorsNb / _currentClientsNR)) + 1) * Config.GetRegularTsScaleMilliseconds());
+                                                nextdate = patchMeandate.AddMilliseconds( (int) ((batchSize / (sensorsNb / _currentClientsNR)) + 1) * Config.GetRegularTsScaleMilliseconds());
 
                                                 using (FileStream fs = File.Create(GetNextTSPath()))
                                                 {
@@ -327,7 +327,7 @@ namespace BenchmarkTool
                                                 }
 
                                                 Random r = new Random();
-                                                double rr = r.Next(1, Config.GetRegularTsScaleMilliseconds() * daySpan * 60 * 60 * 24);
+                                                double rr = r.Next(1,  daySpan * 60 * 60 * 24);
                                                 date = patchMeandate.AddMilliseconds(Config.GetRegularTsScaleMilliseconds() * rr);
                                             }
                                             else
@@ -337,7 +337,8 @@ namespace BenchmarkTool
                                                     string readText = File.ReadAllText(GetNextTSPath());
                                                     date = DateTime.Parse(readText);
                                                 }
-                                                nextdate = date.AddMilliseconds(((batchSize / (sensorsNb / _currentClientsNR))) * Config.GetRegularTsScaleMilliseconds());
+                                                
+                                                nextdate = date.AddMilliseconds((   (int) (batchSize / (sensorsNb / _currentClientsNR))) * Config.GetRegularTsScaleMilliseconds());
 
                                                 using (FileStream fs = File.Create(GetNextTSPath()))
                                                 {

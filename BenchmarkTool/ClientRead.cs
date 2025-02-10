@@ -76,7 +76,7 @@ namespace BenchmarkTool
                     break;
                 case Operation.RangeQueryRawAllDimsData:
                     {
-                        Log.Information("Executing Range Raw Query");
+                        Log.Information("Executing Range Raw AllDIMs Query");
                         var startDate = GetRandomDateTime();
                         var query = new RangeQuery(startDate, _minutes,  sensorsFilter);
                         status = await _targetDb.RangeQueryRawAllDims(query);
@@ -107,7 +107,7 @@ namespace BenchmarkTool
                     break;
                 case Operation.RangeQueryRawAllDimsLimitedData:
                     {
-                        Log.Information("Executing Range Raw Query Limited");
+                        Log.Information("Executing Range Raw AllDims Query Limited");
                         var startDate = GetRandomDateTime();
                         var query = new RangeQuery(startDate, _minutes,  sensorsFilter);
                         status = await _targetDb.RangeQueryRawAllDimsLimited(query, limit);

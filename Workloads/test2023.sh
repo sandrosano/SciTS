@@ -95,3 +95,8 @@ touch finallyfinishedDLTS
 
 
 
+dotnet run --project SciTS/BenchmarkTool populate regular DatalayertsDBasVect 2>&1 | tee RpopDLTS-V.log && 
+dotnet run --project SciTS/BenchmarkTool read regular DatalayertsDBasVect 2>&1 | tee R-DLTS-V.log && 
+dotnet run --project SciTS/BenchmarkTool mixed-AggQueries regular DatalayertsDBasVect 2>&1 | tee  Rmixed-AggQueriesDLTS-V.log &&
+dotnet run --project SciTS/BenchmarkTool mixed-LimitedQueries regular DatalayertsDBasVect 2>&1 | tee  Rmixed-LimitedQueriesDLTS-V.log &&
+dotnet run --project SciTS/BenchmarkTool write regular DatalayertsDBasVect 2>&1 | tee R-DLTS-V.log && 
