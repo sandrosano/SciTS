@@ -1,6 +1,19 @@
-# SciTS v2, 2023 update
+# SciTS v2, 2024 update
 
 A tool to benchmark Time-series on different databases
+
+
+# Citation and Dataset 
+Our 2024 Dataset:
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.14954540.svg)](https://doi.org/10.5281/zenodo.14954540)
+
+Please keep updated for our soon to be published scientific article, containing the evaluation of the SciTS-v2 benchmark.
+
+Software DOI: 
+[![DOI](https://zenodo.org/badge/429005385.svg)](https://zenodo.org/badge/latestdoi/429005385)
+
+
+# Features
 
 - reworked architecture
 - adds mixed, online workloads
@@ -14,36 +27,6 @@ for questions on these features, please contact info@saninfo.de
 
 Requires .NET 7.x cross-platform framework.
 
-## Citation 
-
-[![DOI](https://zenodo.org/badge/429005385.svg)](https://zenodo.org/badge/latestdoi/429005385)
-
-Please cite our work:
-
-> Jalal Mostafa, Sara Wehbi, Suren Chilingaryan, and Andreas Kopmann. 2022. SciTS: A Benchmark for Time-Series Databases in Scientific Experiments and Industrial Internet of Things. In 34th International Conference on Scientific and Statistical Database Management (SSDBM 2022). Association for Computing Machinery, New York, NY, USA, Article 12, 1–11. https://doi.org/10.1145/3538712.3538723
-
-
-### Bibtex
-
-```bibtex
-@inproceedings{10.1145/3538712.3538723,
-    author = {Mostafa, Jalal and Wehbi, Sara and Chilingaryan, Suren and Kopmann, Andreas},
-    title = {SciTS: A Benchmark for Time-Series Databases in Scientific Experiments and Industrial Internet of Things},
-    year = {2022},☺
-    isbn = {9781450396677},
-    publisher = {Association for Computing Machinery},
-    address = {New York, NY, USA},
-    url = {https://doi.org/10.1145/3538712.3538723},
-    doi = {10.1145/3538712.3538723},
-    abstract = {Time-series data has an increasingly growing usage in Industrial Internet of Things (IIoT) and large-scale scientific experiments. Managing time-series data needs a storage engine that can keep up with their constantly growing volumes while providing an acceptable query latency. While traditional ACID databases favor consistency over performance, many time-series databases with novel storage engines have been developed to provide better ingestion performance and lower query latency. To understand how the unique design of a time-series database affects its performance, we design SciTS, a highly extensible and parameterizable benchmark for time-series data. The benchmark studies the data ingestion capabilities of time-series databases especially as they grow larger in size. It also studies the latencies of 5 practical queries from the scientific experiments use case. We use SciTS to evaluate the performance of 4 databases of 4 distinct storage engines: ClickHouse, InfluxDB, TimescaleDB, and PostgreSQL.},
-    booktitle = {Proceedings of the 34th International Conference on Scientific and Statistical Database Management},
-    articleno = {12},
-    numpages = {11},
-    keywords = {time-series databases, database management systems, industrial internet of things, scientific experiments, sensor data, time-series},
-    location = {Copenhagen, Denmark},
-    series = {SSDBM '22}
-}
-```
 
 # How to run
 
@@ -159,13 +142,17 @@ It has following content:
 ```
 
 ### Workload Files
+You simply use the ./Workloads/test2024.sh script, which gives also a good example on how to use the command line arguments.
 
-You can choose from the available workloads by choosing a `*.config` file from `Workloads` folder.
+For SciTSv1 Workloads, from the paper published by Jalal et al. 2022, 
+you can choose from the available workloads by choosing a `*.config` file from `Workloads` folder.
 The file to workload mapping is as follow:
+
+
 
 | Workload    | Workload file                      |
 | ----------- | ---------------------------------- |
-| 2022 WLs    |                                    |
+| 2022 WLs    | SciTS-v1                           |
 | ----------- |                                    |
 | Q1          | query-q1.config                    |
 | Q2          | query-q2.config                    |
@@ -176,14 +163,6 @@ The file to workload mapping is as follow:
 | Concurrency | ingestion-batching-nclients.config |
 | Scaling     | ingestion-scaling.config           |
 |.............|....................................|
-|Collection   |                                    |
-|of 2023 WLs  | test2023.sh                        |
+|Collection   | SciTS-v2                           |
+|of 2024 WLs  | test2024.sh                        |
 
-
-#### Timescale
-We discovered abnormal high latencies and other failures with NPGSQL, so we embedded a python script which does the queries.
-Therefore you need to configure the python location. In case of python 3.10, e.g.
-use "whereis libpython3.10.so", and copy this path.
-Then you go into TimescaleDB.cd, and edit the string in line 134 [ Runtime.PythonDLL = "/usr/lib/_Architecture_-linux-gnu/libpython3.10.so"; ]
-
-So it points to your python location
