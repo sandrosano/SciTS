@@ -8,7 +8,7 @@ Our 2024 Dataset:
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.14954540.svg)](https://doi.org/10.5281/zenodo.14954540)
 
 Please keep updated for our soon to be published scientific article, containing the evaluation of the SciTS-v2 benchmark.
-Here is a preprint of our article: [![LINK](https://github.com/sandrosano/SciTS/blob/2/PREPRINT_Six_Dimension_of_Benchmarking_Time_Series_Databases.pdf)
+ 
 
 Software DOI: 
 [![DOI](https://zenodo.org/badge/429005385.svg)](https://zenodo.org/badge/latestdoi/429005385)
